@@ -31,7 +31,12 @@ export default function RootLayout({
           id="plaudera-widget"
           strategy="afterInteractive"
           dangerouslySetInnerHTML={{
-            __html: `!function(w,d){var p=w.Plaudera=w.Plaudera||function(){(p.q=p.q||[]).push(arguments)};p.l=+new Date;var s=d.createElement("script");s.async=1;s.src="http://localhost:3000/widget.js";d.head.appendChild(s)}(window,document);Plaudera('init',{workspace:'i3i8l3qfgp0h1zxe2n0dcswj'});`,
+            __html: `!function(w,d){var p=w.Plaudera=w.Plaudera||function(){
+    (p.q=p.q||[]).push(arguments)};p.l=+new Date;
+  var s=d.createElement("script");s.async=1;
+  s.src="https://plaudera.com/widget.js";
+  d.head.appendChild(s)}(window,document);
+  Plaudera('init', { workspace: 'w2p83fr1f6vxzayjbz8ul5jr' });`,
           }}
         />
       </body>
