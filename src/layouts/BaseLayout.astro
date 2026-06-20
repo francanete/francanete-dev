@@ -1,5 +1,5 @@
 ---
-import { siteAuthor, siteDescription, siteTitle, siteUrl } from '../lib/site';
+import { siteAuthor, siteDescription, siteTagline, siteTitle, siteUrl } from '../lib/site';
 import { buildWebsiteJsonLd } from '../lib/schema';
 
 const {
@@ -95,7 +95,9 @@ const nav = [
       * { box-sizing: border-box; }
       html, body { margin: 0; padding: 0; }
       body {
-        background: var(--ed-paper);
+        background:
+          radial-gradient(120% 72% at 50% -8%, #fdfaf3 0%, var(--ed-paper) 46%, var(--ed-paper-3) 100%)
+          var(--ed-paper) fixed;
         color: var(--ed-ink);
         font-family: var(--ed-serif);
         line-height: 1.6;
@@ -138,25 +140,31 @@ const nav = [
       .ed-rule { border: 0; border-top: 1px solid var(--ed-rule); margin: 0; }
 
       /* ---------------------------------------------------- MASTHEAD */
-      .ed-header { background: var(--ed-paper); position: sticky; top: 0; z-index: 30; }
+      .ed-header {
+        position: sticky; top: 0; z-index: 30;
+        background: rgba(248,244,236,0.72);
+        backdrop-filter: saturate(1.1) blur(10px);
+        -webkit-backdrop-filter: saturate(1.1) blur(10px);
+      }
       .ed-headerbar {
         display: grid;
         grid-template-columns: 1fr auto 1fr;
         align-items: center;
         gap: 1rem;
-        min-height: 3.25rem;
-        border-top: 1px solid var(--ed-rule);
+        min-height: 3.75rem;
       }
       .ed-headerbar a { text-decoration: none; color: var(--ed-ink); }
       .ed-brand { justify-self: start; font-family: var(--ed-serif); font-weight: 600; letter-spacing: -0.01em; font-size: 1.02rem; line-height: 1; }
       .ed-brand .tld { color: var(--ed-accent); }
       .ed-subhead { justify-self: center; margin: 0; font-family: var(--ed-sans); font-size: 0.72rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--ed-ink-3); text-align: center; }
+      /* the cover promotes the tagline to a hero, so hide the running one there */
+      .is-cover .ed-subhead { display: none; }
       .ed-navbar { justify-self: end; }
       .ed-navlinks { display: flex; justify-content: flex-end; gap: 1rem; flex-wrap: wrap; }
 
       /* ------------------------------------------------------ FOOTER */
-      .ed-footer { margin-top: auto; background: var(--ed-paper); }
-      .ed-footer-inner { min-height: 3.25rem; display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; gap: 1rem; border-top: 1px solid var(--ed-rule); }
+      .ed-footer { margin-top: auto; background: transparent; }
+      .ed-footer-inner { min-height: 5rem; display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; gap: 1rem; }
       .ed-footer-mark { justify-self: start; font-family: var(--ed-serif); font-weight: 600; letter-spacing: -0.01em; font-size: 1.02rem; }
       .ed-footer-mark .tld { color: var(--ed-accent); }
       .ed-footer-links { display: flex; gap: 1rem; flex-wrap: wrap; justify-content: center; }
@@ -180,16 +188,46 @@ const nav = [
       .ed-prose li { margin: 0 0 0.5rem; }
       .ed-prose li::marker { color: var(--ed-accent); }
       .ed-prose blockquote {
-        margin: 2rem 0; border-left: 2px solid var(--ed-accent); padding-left: 1.4rem;
-        font-family: var(--ed-serif); font-weight: 500; font-size: 1.5rem; line-height: 1.3; color: var(--ed-ink); font-style: normal;
+        margin: 2.6rem 0; padding: 0;
+        font-family: var(--ed-serif); font-weight: 500; font-size: 1.62rem; line-height: 1.36; color: var(--ed-accent-d); font-style: italic;
       }
       .ed-prose blockquote p { margin: 0 0 0.6rem; }
-      .ed-prose code { font-family: var(--ed-mono); font-size: 0.84em; background: var(--ed-paper-2); border: 1px solid var(--ed-rule); padding: 0.1rem 0.3rem; }
-      .ed-prose pre { background: var(--ed-ink); color: var(--ed-paper); padding: 1.1rem 1.2rem; overflow: auto; font-family: var(--ed-mono); font-size: 0.86rem; line-height: 1.6; }
+      .ed-prose code { font-family: var(--ed-mono); font-size: 0.84em; background: var(--ed-paper-2); padding: 0.12rem 0.34rem; border-radius: 2px; }
+      .ed-prose pre { background: var(--ed-ink); color: var(--ed-paper); padding: 1.1rem 1.2rem; overflow: auto; font-family: var(--ed-mono); font-size: 0.86rem; line-height: 1.6; border-radius: 3px; }
       .ed-prose pre code { background: none; border: none; padding: 0; color: inherit; font-size: inherit; }
-      .ed-prose table { width: 100%; border-collapse: collapse; margin: 1.75rem 0; font-family: var(--ed-sans); font-size: 0.95rem; }
-      .ed-prose th, .ed-prose td { border: 1px solid var(--ed-rule-2); padding: 0.7rem 0.85rem; vertical-align: top; text-align: left; }
-      .ed-prose th { background: var(--ed-paper-2); font-size: 0.72rem; letter-spacing: 0.08em; text-transform: uppercase; font-weight: 700; }
+      .ed-prose table { width: 100%; border-collapse: collapse; margin: 1.9rem 0; font-family: var(--ed-sans); font-size: 0.95rem; }
+      .ed-prose th, .ed-prose td { padding: 0.7rem 1.2rem 0.7rem 0; vertical-align: top; text-align: left; }
+      .ed-prose th { border-bottom: 1px solid var(--ed-ink); font-size: 0.72rem; letter-spacing: 0.08em; text-transform: uppercase; font-weight: 700; color: var(--ed-ink-2); }
+
+      /* --------------------------------------------- EDITORIAL FURNITURE */
+      .ed-dateline { font-family: var(--ed-sans); font-size: 0.72rem; font-weight: 600; letter-spacing: 0.24em; text-transform: uppercase; color: var(--ed-ink-3); margin: 0; }
+
+      /* ----------------------------------------------------- COVER FLAG */
+      .ed-flag { text-align: center; padding-top: 4rem; }
+      .ed-hero {
+        font-family: var(--ed-serif); font-weight: 600; letter-spacing: -0.025em;
+        font-size: clamp(2.4rem, 6vw, 5rem); line-height: 1.04;
+        margin: 1.2rem auto 0; max-width: 16ch; color: var(--ed-ink);
+        text-wrap: balance;
+      }
+      .ed-hero em { font-style: italic; color: var(--ed-accent-d); }
+
+      /* ------------------------------------------------- FRONT-PAGE GRID */
+      .ed-front { display: grid; grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr); gap: 5.5rem; align-items: start; }
+      .ed-lead-h { font-family: var(--ed-serif); font-weight: 600; letter-spacing: -0.025em; font-size: clamp(2.1rem, 4vw, 3.4rem); line-height: 1.07; margin: 0; max-width: 18ch; }
+      .ed-lead-dek { font-family: var(--ed-serif); font-size: 1.26rem; line-height: 1.56; color: var(--ed-ink-2); margin: 1rem 0; max-width: 42ch; }
+      .ed-rail { display: flex; flex-direction: column; gap: 2.8rem; }
+      .ed-rail-h { font-family: var(--ed-serif); font-weight: 600; letter-spacing: -0.018em; font-size: 1.45rem; line-height: 1.16; margin: 0; }
+      .ed-rail-dek { font-family: var(--ed-serif); font-size: 1.04rem; line-height: 1.5; color: var(--ed-ink-2); margin: 0.55rem 0; }
+
+      /* overflow beyond lead + rail */
+      .ed-grid3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 3.4rem; margin-top: 4rem; }
+
+      /* ------------------------------------------------------- FEED LIST */
+      .ed-feed-row { display: block; max-width: 62ch; margin-inline: auto; padding: 2.8rem 0; }
+      .ed-feed-row:first-child { padding-top: 0.6rem; }
+      .ed-feed-h { font-family: var(--ed-serif); font-weight: 600; letter-spacing: -0.02em; font-size: 1.9rem; line-height: 1.12; margin: 0.55rem 0; max-width: 26ch; }
+      .ed-feed-dek { font-family: var(--ed-serif); font-size: 1.1rem; line-height: 1.55; color: var(--ed-ink-2); margin: 0 0 0.8rem; max-width: 56ch; }
 
       @media (prefers-reduced-motion: reduce) {
         .ed-nav::after, .ed-art-h, .ed-btn { transition: none; }
@@ -213,28 +251,31 @@ const nav = [
         }
         .ed-navlinks {
           justify-content: center;
-          gap: 0.85rem;
-          padding-top: 0.1rem;
-          border-top: 1px solid var(--ed-rule);
-          margin-top: 0.15rem;
-          padding-bottom: 0;
+          gap: 1.1rem;
+          margin-top: 0.1rem;
         }
         .ed-nav {
           font-size: 0.7rem;
         }
+        .ed-front { grid-template-columns: 1fr; gap: 2.8rem; }
+        .ed-rail { margin-top: 0; gap: 2.6rem; padding-top: 0; }
+        .ed-grid3 { grid-template-columns: 1fr; gap: 2.6rem; margin-top: 2.8rem; }
+        .ed-hero { font-size: clamp(2rem, 8.5vw, 3.2rem); }
       }
       @media (max-width: 540px) {
+        .ed-feed-row { padding: 2rem 0; }
+        .ed-feed-h { font-size: 1.6rem; }
         .ed-row-sm { grid-template-columns: 1fr !important; gap: 0.5rem !important; }
         .ed-row-sm .ed-meta-date { padding-top: 0 !important; }
       }
     </style>
   </head>
-  <body>
+  <body class={path === '/' ? 'is-cover' : ''}>
     <div class="ed-shell">
       <header class="ed-header">
         <div class="ed-wrap ed-headerbar">
           <a class="ed-brand" href="/">francanete<span class="tld">.dev</span></a>
-          <p class="ed-subhead">A journal on how machines read the web</p>
+          <p class="ed-subhead">{siteTagline}</p>
           <nav class="ed-navbar" aria-label="Primary">
             <div class="ed-navlinks">
               {nav.map((item) => (

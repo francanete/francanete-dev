@@ -10,19 +10,19 @@ const entries = (await getCollection('research'))
 ---
 <BaseLayout title="Research | francanete.dev" description="Dated, evidence-graded studies of how generative engines discover, cite and reuse the open web.">
   <main>
-    <section class="ed-wrap" style="padding-top:3rem;padding-bottom:1.5rem;text-align:center;border-bottom:1px solid var(--ed-rule);">
-      <h1 class="ed-serif" style="font-size:clamp(2.4rem, 5vw, 4rem);margin:0 0 0.8rem;">Research</h1>
-      <p style="font-family:var(--ed-serif);font-style:italic;font-size:1.2rem;color:var(--ed-ink-2);max-width:46ch;margin:0 auto 1.4rem;">
+    <section class="ed-wrap" style="padding-top:4rem;text-align:center;">
+      <h1 class="ed-serif" style="font-size:clamp(2.4rem, 5vw, 4rem);margin:0 0 0.9rem;">Research</h1>
+      <p style="font-family:var(--ed-serif);font-style:italic;font-size:1.25rem;line-height:1.5;color:var(--ed-ink-2);max-width:46ch;margin:0 auto;">
         Dated, evidence-graded studies of how generative engines discover, cite and reuse the open web.
       </p>
     </section>
 
-    <section class="ed-wrap" style="padding-top:1rem;padding-bottom:4rem;">
+    <section class="ed-wrap" style="padding-top:3.5rem;padding-bottom:6rem;">
       {entries.map((entry) => (
-        <a class="ed-art" href={`/research/${entry.slug}/`} style="display:block;padding:1.6rem 0;">
-          <p class="ed-dept">Research</p>
-          <h3 class="ed-art-h ed-serif" style="font-size:1.8rem;line-height:1.12;margin:0.5rem 0;max-width:28ch;">{entry.data.title}</h3>
-          <p style="font-family:var(--ed-serif);font-size:1.08rem;line-height:1.5;color:var(--ed-ink-2);margin:0 0 0.6rem;max-width:60ch;">{entry.data.description}</p>
+        <a class="ed-art ed-feed-row" href={`/research/${entry.slug}/`}>
+          <p class="ed-dept" style="margin-bottom:0.6rem;">Research</p>
+          <h3 class="ed-art-h ed-feed-h">{entry.data.title}</h3>
+          <p class="ed-feed-dek">{entry.data.description}</p>
           <p class="ed-meta">{siteAuthor} · {monthYear(entry.data.date)} · {readingTime(entry.body)}</p>
         </a>
       ))}

@@ -38,9 +38,9 @@ const jsonLd = [
       <p class="ed-dept">Research</p>
       <h1 class="ed-serif" style="font-size:clamp(2.3rem, 5vw, 3.8rem);line-height:1.06;margin:0.9rem auto 1.1rem;max-width:20ch;">{entry.data.title}</h1>
       <p style="font-family:var(--ed-serif);font-style:italic;font-size:1.35rem;line-height:1.45;color:var(--ed-ink-2);max-width:44ch;margin:0 auto 1.4rem;">{entry.data.description}</p>
-      <div style="display:flex;flex-wrap:wrap;justify-content:center;gap:0.9rem 1.2rem;border-top:1px solid var(--ed-rule);border-bottom:1px solid var(--ed-rule);padding:0.7rem 0;">
+      <div style="display:flex;flex-wrap:wrap;justify-content:center;align-items:center;gap:0.4rem 1.2rem;">
         <span class="ed-meta" style="color:var(--ed-ink);">By {siteAuthor}</span>
-        <span class="ed-meta">Evidence: {entry.data.evidenceGrade}</span>
+        <span class="ed-meta" style="color:var(--ed-accent-d);">Evidence: {entry.data.evidenceGrade}</span>
         <span class="ed-meta">Published: {entry.data.date.toISOString().slice(0, 10)}</span>
         {entry.data.updated && <span class="ed-meta">Updated: {entry.data.updated.toISOString().slice(0, 10)}</span>}
         <span class="ed-meta">{monthYear(entry.data.date)} · {readingTime(entry.body)}</span>
@@ -51,19 +51,15 @@ const jsonLd = [
       <Content />
 
       {entry.data.engines.length > 0 && (
-        <div style="margin-top:2.4rem;padding-top:1.4rem;border-top:1px solid var(--ed-rule);">
-          <p class="ed-dept" style="margin-bottom:0.7rem;">Engines studied</p>
-          <div style="display:flex;flex-wrap:wrap;gap:0.5rem;">
-            {entry.data.engines.map((e) => (
-              <span class="ed-meta" style="border:1px solid var(--ed-rule);padding:0.25rem 0.6rem;font-family:var(--ed-sans);">{e}</span>
-            ))}
-          </div>
+        <div style="margin-top:2.8rem;">
+          <p class="ed-dept" style="margin-bottom:0.6rem;">Engines studied</p>
+          <p style="font-family:var(--ed-sans);font-size:0.92rem;color:var(--ed-ink-2);letter-spacing:0.01em;margin:0;">{entry.data.engines.join('  ·  ')}</p>
         </div>
       )}
 
-      <div style="margin-top:2rem;display:flex;justify-content:space-between;align-items:center;gap:1rem;flex-wrap:wrap;">
+      <div style="margin-top:3.2rem;display:flex;justify-content:space-between;align-items:center;gap:1rem;flex-wrap:wrap;">
         <a class="ed-nav" href="/research/">← Back to Research</a>
-        <a class="ed-btn ghost" href="/">Return to cover →</a>
+        <a class="ed-nav" href="/">Return to cover →</a>
       </div>
     </article>
   </main>

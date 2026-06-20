@@ -2,7 +2,7 @@
 import { getCollection } from 'astro:content';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import { monthYear, readingTime } from '../lib/reading';
-import { siteDescription, siteTitle, siteUrl } from '../lib/site';
+import { siteDescription, siteTagline, siteTitle, siteUrl } from '../lib/site';
 
 const entries = (await getCollection('research'))
   .filter((e) => e.data.status !== 'draft')
@@ -15,28 +15,60 @@ const pieces = entries.map((entry, i) => ({
   date: monthYear(entry.data.date),
   read: readingTime(entry.body),
   dept: i === 0 ? 'The Lead · GEO' : 'Research',
-  lead: i === 0,
 }));
+
+const [lead, ...rest] = pieces;
+const railItems = rest.slice(0, 2);
+const gridItems = rest.slice(2);
+const dateline = lead ? lead.date : monthYear(new Date());
+
+// Accent a single word in the hero; fall back to the plain tagline if absent.
+const heroWord = 'machines';
+const heroParts = siteTagline.split(heroWord);
 ---
 <BaseLayout title={siteTitle} description={siteDescription} canonical={siteUrl}>
   <main>
-    <section class="ed-wrap" style="padding-top:2.4rem;padding-bottom:4rem;">
-
-      {pieces.map((p) => (
-        <a
-          class="ed-art ed-row-sm"
-          href={`/research/${p.slug}/`}
-          style={`display:grid;grid-template-columns:5.5rem 1fr;gap:1.6rem;align-items:baseline;padding:${p.lead ? '1.8rem 0' : '1.4rem 0'};`}
-        >
-          <span class="ed-meta ed-meta-date" style="padding-top:0.35rem;white-space:nowrap;">{p.date}</span>
-          <div>
-            <p class="ed-dept" style="margin-bottom:0.4rem;">{p.dept}</p>
-            <h2 class="ed-art-h ed-serif" style={`font-size:${p.lead ? 'clamp(1.9rem, 3.4vw, 2.7rem)' : '1.55rem'};line-height:1.16;margin:0;max-width:26ch;`}>{p.title}</h2>
-            <p style={`font-family:var(--ed-serif);font-size:${p.lead ? '1.18rem' : '1.05rem'};line-height:1.5;color:var(--ed-ink-2);margin:0.55rem 0 0.6rem;max-width:58ch;`}>{p.dek}</p>
-            <p class="ed-meta">{p.read} read</p>
-          </div>
-        </a>
-      ))}
+    <section class="ed-wrap ed-flag">
+      <p class="ed-dateline">{dateline}</p>
+      <h1 class="ed-hero">{heroParts.length === 2 ? (<Fragment>{heroParts[0]}<em>{heroWord}</em>{heroParts[1]}</Fragment>) : siteTagline}</h1>
     </section>
+
+    {lead && (
+      <section class={`ed-wrap ${railItems.length ? 'ed-front' : ''}`} style="padding-top:4.5rem;padding-bottom:6rem;">
+        <a class="ed-art ed-lead" href={`/research/${lead.slug}/`}>
+          <p class="ed-dept" style="margin-bottom:0.7rem;">{lead.dept}</p>
+          <h2 class="ed-art-h ed-lead-h">{lead.title}</h2>
+          <p class="ed-lead-dek">{lead.dek}</p>
+          <p class="ed-meta">{lead.read} read</p>
+        </a>
+
+        {railItems.length > 0 && (
+          <div class="ed-rail">
+            {railItems.map((p) => (
+              <a class="ed-art" href={`/research/${p.slug}/`}>
+                <p class="ed-dept" style="margin-bottom:0.6rem;">{p.dept}</p>
+                <h3 class="ed-art-h ed-rail-h">{p.title}</h3>
+                <p class="ed-rail-dek">{p.dek}</p>
+                <p class="ed-meta">{p.date} · {p.read}</p>
+              </a>
+            ))}
+          </div>
+        )}
+      </section>
+    )}
+
+    {gridItems.length > 0 && (
+      <section class="ed-wrap" style="padding-bottom:6rem;">
+        <div class="ed-grid3">
+          {gridItems.map((p) => (
+            <a class="ed-art" href={`/research/${p.slug}/`}>
+              <p class="ed-dept" style="margin-bottom:0.55rem;">{p.dept}</p>
+              <h3 class="ed-art-h ed-serif" style="font-size:1.35rem;line-height:1.18;margin:0 0 0.5rem;max-width:24ch;">{p.title}</h3>
+              <p class="ed-meta">{p.date} · {p.read}</p>
+            </a>
+          ))}
+        </div>
+      </section>
+    )}
   </main>
 </BaseLayout>
