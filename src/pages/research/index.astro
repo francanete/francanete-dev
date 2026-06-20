@@ -1,0 +1,29 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+
+const entries = (await getCollection('research')).sort((a, b) => b.data.date.getTime() - a.data.date.getTime());
+---
+<BaseLayout title="Research | francanete.dev" description="Two focused GEO research articles.">
+  <main class="stack">
+    <section class="hero-panel">
+      <span class="eyebrow">Research</span>
+      <h1>Research that reads like source material.</h1>
+      <p class="lede">Two articles: the main thesis and the high-confidence GEO factors.</p>
+      <p class="muted">Each one is written to be citable, skimmable, and easy to compare.</p>
+    </section>
+
+    <div class="card-grid section">
+      {entries.map((entry) => (
+        <a class="card" href={`/research/${entry.slug}/`}>
+          <div class="meta-row" style="margin-top:0">
+            <span class="badge">{entry.data.evidenceGrade}</span>
+            <span>{entry.data.date.toISOString().slice(0, 10)}</span>
+          </div>
+          <strong>{entry.data.title}</strong>
+          <p class="muted">{entry.data.description}</p>
+        </a>
+      ))}
+    </div>
+  </main>
+</BaseLayout>

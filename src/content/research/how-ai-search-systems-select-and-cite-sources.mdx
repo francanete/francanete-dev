@@ -1,0 +1,153 @@
+---
+title: How AI Search Systems Select and Cite Sources
+description: Evidence-based summary of how ChatGPT, Perplexity, Gemini, Claude, and Google AI Overviews discover, cite, mention, and use web sources.
+date: 2026-06-20
+updated: 2026-06-20
+status: published
+evidenceGrade: strong-evidence
+engines:
+  - ChatGPT
+  - Perplexity
+  - Gemini
+  - Claude
+  - Google AI Overviews
+tags:
+  - GEO
+  - AI search
+  - citations
+  - retrieval
+  - AI Overviews
+canonical: https://francanete.dev/research/how-ai-search-systems-select-and-cite-sources/
+---
+
+# How AI Search Systems Select and Cite Sources
+
+AI search systems do not simply repeat classic search rankings. They retrieve, summarize, and cite sources through systems whose exact weighting is mostly hidden, but whose visible behavior still gives publishers useful signals.
+
+## The short version
+
+AI search systems are retrieval-augmented, but they are not ranking mirrors. They often cite pages that are not the same as the visible top results.
+
+That matters because a page can be useful to an AI system without being a classic SEO winner. A page can also rank well in search and still be a weak citation candidate if it is thin, vague, outdated, or hard to quote.
+
+## What seems stable
+
+### Crawlable pages get a chance to be seen
+
+If a page is blocked, broken, or effectively invisible to crawlers, it is much less likely to appear in any AI answer.
+
+**Example:** a clean article with a canonical URL, readable HTML, and a normal text body has a much better shot than a page that depends on client-side rendering for its core content.
+
+### Current pages matter for time-sensitive questions
+
+When a user asks about a new model release, policy change, pricing update, or recent event, freshness becomes a major filter.
+
+**Implication:** if a page has no visible publish date or update date, it gives the system less confidence that the content is current.
+
+### Structured, source-like pages are easier to reuse
+
+Pages with headings, definitions, short sections, and compact evidence blocks are easier to lift from than long promotional prose.
+
+**Example:** a page that says “claim → evidence → takeaway” is easier to cite than one that buries the point in marketing copy.
+
+### Official and primary sources appear often
+
+Across many query types, systems tend to lean toward pages that look authoritative: official docs, primary research, standards, company docs, or direct reporting.
+
+**Implication:** if your page is trying to be cited, it should act like a source, not like a landing page.
+
+## Concrete examples
+
+### Example 1: “What changed in X?”
+
+For a change-focused query, the best cited sources are often the ones that show:
+- a clear date
+- a clear statement of the change
+- supporting detail in the body
+- a canonical URL that matches the published page
+
+A vague summary page may be readable, but a dated changelog-style article is usually easier to trust.
+
+### Example 2: “How does Y work?”
+
+For explanatory queries, systems often prefer pages that define the concept quickly and then support it with examples.
+
+A strong page usually has:
+- a direct answer in the first screen
+- one idea per section
+- terminology used consistently
+- enough specificity that a model can quote it without rewriting everything
+
+### Example 3: “Which source should I trust?”
+
+When the user asks for trust, the system often looks for source quality signals rather than keyword density.
+
+That can favor:
+- official docs over blog commentary
+- direct data over second-hand claims
+- pages that separate evidence from opinion
+
+## A concrete page pattern
+
+A weak page for AI citation usually looks like this:
+
+- broad title
+- no visible date
+- long introduction before the answer
+- mixed claims and opinions
+- no clear evidence trail
+- conclusion buried near the end
+
+A stronger page looks like this:
+
+- specific title
+- visible publish or update date
+- direct answer near the top
+- short sections with descriptive headings
+- claims separated from evidence
+- final takeaway that can be quoted cleanly
+
+For example, a page titled “AI Search Trends” is harder to use than a page titled “How AI Search Systems Use Freshness Signals.” The second page sets a clearer scope, gives the retrieval system a more precise target, and gives the answer generator cleaner material to summarize.
+
+## What this means for site owners
+
+- Publish pages that answer one specific question well.
+- Make the answer, date, and evidence visible without requiring interaction.
+- Treat structure as part of the content, not decoration.
+
+## What remains unclear
+
+### Backlinks and brand mentions
+
+These still probably matter, but the public evidence is not strong enough to treat them as the main GEO lever.
+
+### Schema alone
+
+Structured data may help machine interpretation, but it does not look like a magic citation switch.
+
+### Retrieval versus memory
+
+It is still hard to know how much of an answer comes from a fresh retrieval step and how much comes from model priors or memory.
+
+## Practical implications
+
+If you want a page to be useful in AI search, optimize for source behavior:
+
+- make the page crawlable
+- state the claim clearly
+- show dates when recency matters
+- use headings and short sections
+- include concrete evidence or examples
+- avoid burying the conclusion
+
+In practice, that means GEO is less about tricks and more about editorial quality plus machine readability.
+
+## Bottom line
+
+The strongest working assumption today is simple: AI systems prefer pages that are easy to retrieve, easy to verify, and easy to quote.
+
+That does not guarantee citation. But it gives a page a real chance.
+
+## Related note
+
+The broader research memo remains preserved in `geo-research.md`.
