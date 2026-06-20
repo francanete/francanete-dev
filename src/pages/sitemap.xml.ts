@@ -6,6 +6,7 @@ export async function GET() {
   const urls = [
     `${siteUrl}/`,
     `${siteUrl}/research/`,
+    `${siteUrl}/experiments/`,
     `${siteUrl}/methodology/`,
     ...research.map((entry) => `${siteUrl}/research/${entry.slug}/`),
   ];
