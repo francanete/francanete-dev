@@ -1,0 +1,48 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { siteDescription, siteTitle, siteUrl } from '../lib/site';
+---
+<BaseLayout title={siteTitle} description={siteDescription} canonical={siteUrl}>
+  <main class="hero-grid">
+    <section class="hero-panel hero-panel--accent">
+      <div class="hero-kicker">
+        <span class="eyebrow">GEO research site</span>
+        <span class="badge">Static</span>
+        <span class="badge">Crawlable</span>
+        <span class="badge">Evidence-first</span>
+      </div>
+      <h1>francanete.dev publishes a small set of evidence-based GEO pages.</h1>
+      <p class="lede">
+        The site tracks how AI systems discover, cite, mention, and reuse web sources.
+        It is intentionally narrow: one methodology page and two research articles.
+      </p>
+      <div class="callout">
+        <p class="muted">The goal is not traffic hacks. It is clear, testable, machine-readable publishing.</p>
+      </div>
+      <div class="stat-grid">
+        <div class="stat">
+          <strong>1 methodology</strong>
+          <span class="muted">How claims are evaluated</span>
+        </div>
+        <div class="stat">
+          <strong>2 research articles</strong>
+          <span class="muted">System behavior and factors</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2>Core pages</h2>
+      <div class="card-grid">
+        <a class="card" href="/methodology/">
+          <strong>Methodology</strong>
+          <p class="muted">How evidence is framed, what counts, and what gets excluded.</p>
+        </a>
+        <a class="card" href="/research/">
+          <strong>Research</strong>
+          <p class="muted">Two focused articles: system behavior and high-confidence factors.</p>
+        </a>
+      </div>
+    </section>
+  </main>
+</BaseLayout>

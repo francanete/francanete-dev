@@ -1,0 +1,50 @@
+---
+import { getCollection, render } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { buildArticleJsonLd } from '../../lib/schema';
+
+export async function getStaticPaths() {
+  const entries = await getCollection('research');
+  return entries.map((entry) => ({ params: { slug: entry.slug }, props: { entry } }));
+}
+
+const { entry } = Astro.props;
+const { Content } = await render(entry);
+const canonical = entry.data.canonical ?? `https://francanete.dev/research/${entry.slug}/`;
+const jsonLd = [
+  buildArticleJsonLd({
+    title: entry.data.title,
+    description: entry.data.description,
+    url: canonical,
+    datePublished: entry.data.date,
+    dateModified: entry.data.updated,
+    keywords: entry.data.tags,
+  }),
+];
+---
+<BaseLayout
+  title={`${entry.data.title} | francanete.dev`}
+  description={entry.data.description}
+  canonical={canonical}
+  type="article"
+  jsonLd={jsonLd}
+>
+  <main>
+    <article>
+      <span class="eyebrow">Research article</span>
+      <h1>{entry.data.title}</h1>
+      <p class="lede">{entry.data.description}</p>
+      <div class="meta-row">
+        <span class="badge">Evidence: {entry.data.evidenceGrade}</span>
+        <span>Published: {entry.data.date.toISOString().slice(0, 10)}</span>
+        {entry.data.updated && <span>Updated: {entry.data.updated.toISOString().slice(0, 10)}</span>}
+      </div>
+      {entry.data.engines.length > 0 && (
+        <div class="meta-row">
+          {entry.data.engines.map((engine) => <span class="badge">{engine}</span>)}
+        </div>
+      )}
+      <Content />
+    </article>
+  </main>
+</BaseLayout>
