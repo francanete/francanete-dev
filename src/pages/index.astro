@@ -1,48 +1,47 @@
 ---
+import { getCollection } from 'astro:content';
 import BaseLayout from '../layouts/BaseLayout.astro';
+import { monthYear, readingTime } from '../lib/reading';
 import { siteDescription, siteTitle, siteUrl } from '../lib/site';
+
+const entries = (await getCollection('research'))
+  .filter((e) => e.data.status !== 'draft')
+  .sort((a, b) => b.data.date.getTime() - a.data.date.getTime());
+
+const pieces = entries.map((entry, i) => ({
+  slug: entry.slug,
+  title: entry.data.title,
+  dek: entry.data.description,
+  date: monthYear(entry.data.date),
+  read: readingTime(entry.body),
+  dept: i === 0 ? 'The Lead · GEO' : 'Research',
+  lead: i === 0,
+}));
 ---
 <BaseLayout title={siteTitle} description={siteDescription} canonical={siteUrl}>
-  <main class="hero-grid">
-    <section class="hero-panel hero-panel--accent">
-      <div class="hero-kicker">
-        <span class="eyebrow">GEO research site</span>
-        <span class="badge">Static</span>
-        <span class="badge">Crawlable</span>
-        <span class="badge">Evidence-first</span>
+  <main>
+    <section class="ed-wrap" style="padding-top:2.4rem;padding-bottom:4rem;">
+      <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:0.4rem;">
+        <p class="ed-dept">Latest writing</p>
+        <a class="ed-nav" href="/research/">Browse by department →</a>
       </div>
-      <h1>francanete.dev publishes a small set of evidence-based GEO pages.</h1>
-      <p class="lede">
-        The site tracks how AI systems discover, cite, mention, and reuse web sources.
-        It is intentionally narrow: one methodology page and two research articles.
-      </p>
-      <div class="callout">
-        <p class="muted">The goal is not traffic hacks. It is clear, testable, machine-readable publishing.</p>
-      </div>
-      <div class="stat-grid">
-        <div class="stat">
-          <strong>1 methodology</strong>
-          <span class="muted">How claims are evaluated</span>
-        </div>
-        <div class="stat">
-          <strong>2 research articles</strong>
-          <span class="muted">System behavior and factors</span>
-        </div>
-      </div>
-    </section>
 
-    <section class="section">
-      <h2>Core pages</h2>
-      <div class="card-grid">
-        <a class="card" href="/methodology/">
-          <strong>Methodology</strong>
-          <p class="muted">How evidence is framed, what counts, and what gets excluded.</p>
+      {pieces.map((p) => (
+        <a
+          class="ed-art ed-row-sm"
+          href={`/research/${p.slug}/`}
+          style={`display:grid;grid-template-columns:5.5rem 1fr;gap:1.6rem;align-items:baseline;border-top:1px solid var(--ed-rule);padding:${p.lead ? '1.8rem 0' : '1.4rem 0'};`}
+        >
+          <span class="ed-meta ed-meta-date" style="padding-top:0.35rem;white-space:nowrap;">{p.date}</span>
+          <div>
+            <p class="ed-dept" style="margin-bottom:0.4rem;">{p.dept}</p>
+            <h2 class="ed-art-h ed-serif" style={`font-size:${p.lead ? 'clamp(1.9rem, 3.4vw, 2.7rem)' : '1.55rem'};line-height:1.16;margin:0;max-width:26ch;`}>{p.title}</h2>
+            <p style={`font-family:var(--ed-serif);font-size:${p.lead ? '1.18rem' : '1.05rem'};line-height:1.5;color:var(--ed-ink-2);margin:0.55rem 0 0.6rem;max-width:58ch;`}>{p.dek}</p>
+            <p class="ed-meta">{p.read} read</p>
+          </div>
         </a>
-        <a class="card" href="/research/">
-          <strong>Research</strong>
-          <p class="muted">Two focused articles: system behavior and high-confidence factors.</p>
-        </a>
-      </div>
+      ))}
+      <hr class="ed-rule" />
     </section>
   </main>
 </BaseLayout>

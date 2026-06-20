@@ -1,16 +1,17 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 ---
-<BaseLayout title="Methodology | francanete.dev" description="How we run GEO research and experiments.">
-  <main class="stack">
-    <span class="eyebrow">Methodology</span>
-    <h1>Methodology</h1>
-    <p class="lede">
-      GEO work here is structured around testable claims, visible evidence, and pages that
-      AI systems can crawl, cite, and reuse.
-    </p>
+<BaseLayout title="Methodology | francanete.dev" description="How the research here is run and graded.">
+  <main>
+    <section class="ed-wrap" style="padding-top:3rem;padding-bottom:1.5rem;text-align:center;border-bottom:1px solid var(--ed-rule);">
+      <p class="ed-dept">About the journal</p>
+      <h1 class="ed-serif" style="font-size:clamp(2.4rem, 5vw, 4rem);margin:0.9rem 0 0.8rem;">Methodology</h1>
+      <p style="font-family:var(--ed-serif);font-style:italic;font-size:1.2rem;color:var(--ed-ink-2);max-width:48ch;margin:0 auto 1.4rem;">
+        Testable claims, visible evidence, and pages that AI systems can crawl, cite, and reuse.
+      </p>
+    </section>
 
-    <section class="section">
+    <article class="ed-read ed-prose" style="margin-top:2.4rem;padding-bottom:3.5rem;">
       <h2>Principles</h2>
       <ul>
         <li>Start with crawlable, semantic HTML.</li>
@@ -19,9 +20,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
         <li>Prefer primary sources and dated observations.</li>
         <li>Treat every GEO tactic as a hypothesis until tested.</li>
       </ul>
-    </section>
 
-    <section class="section">
       <h2>How a claim becomes a page</h2>
       <ol>
         <li>Write the claim in one sentence.</li>
@@ -30,39 +29,30 @@ import BaseLayout from '../layouts/BaseLayout.astro';
         <li>Publish only if the page adds durable value.</li>
         <li>Remove or merge pages that become redundant.</li>
       </ol>
-    </section>
 
-    <section class="section">
       <h2>Evidence standards</h2>
       <p>
-        Proven means directly documented or reproducible. Strong evidence means multiple
-        independent sources point in the same direction. Hypothesis means the claim is still
-        inferential. Marketing claim means it should not be treated as evidence yet.
+        <strong>Proven</strong> means directly documented or reproducible. <strong>Strong evidence</strong> means multiple
+        independent sources point in the same direction. <strong>Hypothesis</strong> means the claim is still
+        inferential. <strong>Marketing claim</strong> means it should not be treated as evidence yet.
       </p>
-    </section>
 
-    <section class="section">
       <h2>What we measure</h2>
       <p>
-        Crawlability, canonical correctness, citation appearance, source reuse, surfaced
-        snippets, update dates, and whether a page is easy for a machine to quote.
+        Crawlability, canonical correctness, citation appearance, source reuse, surfaced snippets, update dates,
+        and whether a page is easy for a machine to quote.
       </p>
-    </section>
 
-    <section class="section">
       <h2>What gets cut</h2>
       <p>
-        Thin summaries, duplicate pages, claims without evidence, and content that only repeats
-        what the flagship article already says.
+        Thin summaries, duplicate pages, claims without evidence, and content that only repeats what the flagship
+        article already says.
       </p>
-    </section>
 
-    <section class="section">
       <h2>Why this site exists</h2>
       <p>
-        To publish a small number of strong, testable, citable pages instead of a large number
-        of thin GEO pages.
+        To publish a small number of strong, testable, citable pages instead of a large number of thin GEO pages.
       </p>
-    </section>
+    </article>
   </main>
 </BaseLayout>

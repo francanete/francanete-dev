@@ -1,29 +1,32 @@
 ---
 import { getCollection } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
+import { monthYear, readingTime } from '../../lib/reading';
+import { siteAuthor } from '../../lib/site';
 
-const entries = (await getCollection('research')).sort((a, b) => b.data.date.getTime() - a.data.date.getTime());
+const entries = (await getCollection('research'))
+  .filter((e) => e.data.status !== 'draft')
+  .sort((a, b) => b.data.date.getTime() - a.data.date.getTime());
 ---
-<BaseLayout title="Research | francanete.dev" description="Two focused GEO research articles.">
-  <main class="stack">
-    <section class="hero-panel">
-      <span class="eyebrow">Research</span>
-      <h1>Research that reads like source material.</h1>
-      <p class="lede">Two articles: the main thesis and the high-confidence GEO factors.</p>
-      <p class="muted">Each one is written to be citable, skimmable, and easy to compare.</p>
+<BaseLayout title="Research | francanete.dev" description="Dated, evidence-graded studies of how generative engines discover, cite and reuse the open web.">
+  <main>
+    <section class="ed-wrap" style="padding-top:3rem;padding-bottom:1.5rem;text-align:center;border-bottom:1px solid var(--ed-rule);">
+      <h1 class="ed-serif" style="font-size:clamp(2.4rem, 5vw, 4rem);margin:0 0 0.8rem;">Research</h1>
+      <p style="font-family:var(--ed-serif);font-style:italic;font-size:1.2rem;color:var(--ed-ink-2);max-width:46ch;margin:0 auto 1.4rem;">
+        Dated, evidence-graded studies of how generative engines discover, cite and reuse the open web.
+      </p>
     </section>
 
-    <div class="card-grid section">
+    <section class="ed-wrap" style="padding-top:1rem;padding-bottom:4rem;">
       {entries.map((entry) => (
-        <a class="card" href={`/research/${entry.slug}/`}>
-          <div class="meta-row" style="margin-top:0">
-            <span class="badge">{entry.data.evidenceGrade}</span>
-            <span>{entry.data.date.toISOString().slice(0, 10)}</span>
-          </div>
-          <strong>{entry.data.title}</strong>
-          <p class="muted">{entry.data.description}</p>
+        <a class="ed-art" href={`/research/${entry.slug}/`} style="display:block;border-top:1px solid var(--ed-rule);padding:1.6rem 0;">
+          <p class="ed-dept">Research</p>
+          <h3 class="ed-art-h ed-serif" style="font-size:1.8rem;line-height:1.12;margin:0.5rem 0;max-width:28ch;">{entry.data.title}</h3>
+          <p style="font-family:var(--ed-serif);font-size:1.08rem;line-height:1.5;color:var(--ed-ink-2);margin:0 0 0.6rem;max-width:60ch;">{entry.data.description}</p>
+          <p class="ed-meta">{siteAuthor} · {monthYear(entry.data.date)} · {readingTime(entry.body)}</p>
         </a>
       ))}
-    </div>
+      <hr class="ed-rule" />
+    </section>
   </main>
 </BaseLayout>

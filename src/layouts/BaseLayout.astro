@@ -1,5 +1,5 @@
 ---
-import { primaryNav, siteAuthor, siteDescription, siteTitle, siteUrl } from '../lib/site';
+import { siteAuthor, siteDescription, siteTitle, siteUrl } from '../lib/site';
 import { buildWebsiteJsonLd } from '../lib/schema';
 
 const {
@@ -11,6 +11,15 @@ const {
 } = Astro.props;
 
 const allJsonLd = [buildWebsiteJsonLd(), ...jsonLd];
+const path = Astro.url.pathname;
+const isActive = (href: string) => (href === '/' ? path === '/' : path.startsWith(href));
+
+// Only departments with real content are surfaced.
+const nav = [
+  { href: '/', label: 'Cover' },
+  { href: '/research/', label: 'Research' },
+  { href: '/methodology/', label: 'Methodology' },
+];
 ---
 <!doctype html>
 <html lang="en">
@@ -29,414 +38,198 @@ const allJsonLd = [buildWebsiteJsonLd(), ...jsonLd];
     <meta property="og:url" content={canonical} />
     <meta property="og:site_name" content={siteTitle} />
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="theme-color" content="#fbfaf7" />
+    <meta name="theme-color" content="#f7f3ea" />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="alternate" type="application/rss+xml" title={siteTitle} href="/rss.xml" />
+    <link rel="preload" as="font" type="font/woff2" href="/fonts/Newsreader-Variable.woff2" crossorigin />
+    <link rel="preload" as="font" type="font/woff2" href="/fonts/HankenGrotesk-Variable.woff2" crossorigin />
     {allJsonLd.map((entry) => (
       <script type="application/ld+json" set:html={JSON.stringify(entry)} />
     ))}
-    <style>
+    <style is:global>
+      /* ---------------------------------------------------------- FONTS */
+      @font-face {
+        font-family: "Newsreader";
+        src: url("/fonts/Newsreader-Variable.woff2") format("woff2");
+        font-weight: 400 700; font-style: normal; font-display: swap;
+      }
+      @font-face {
+        font-family: "Newsreader";
+        src: url("/fonts/Newsreader-Italic-Variable.woff2") format("woff2");
+        font-weight: 400 700; font-style: italic; font-display: swap;
+      }
+      @font-face {
+        font-family: "Hanken Grotesk";
+        src: url("/fonts/HankenGrotesk-Variable.woff2") format("woff2");
+        font-weight: 400 700; font-style: normal; font-display: swap;
+      }
+      @font-face {
+        font-family: "JetBrains Mono";
+        src: url("/fonts/JetBrainsMono-Variable.woff2") format("woff2");
+        font-weight: 400 700; font-style: normal; font-display: swap;
+      }
+
+      /* --------------------------------------------------------- TOKENS */
+      /* The Review: warm ivory, brown-black ink, editorial terracotta */
       :root {
         color-scheme: light;
-        --bg: #fbfaf7;
-        --surface: #ffffff;
-        --surface-soft: #f4efe7;
-        --border: #e6ded2;
-        --border-strong: #cdbfae;
-        --text: #1c1917;
-        --muted: #6f655b;
-        --accent: #8a4b2c;
-        --accent-soft: #f3e2d7;
-        --shadow: 0 18px 50px rgba(55, 42, 31, 0.08);
-        --max: 64rem;
-        --reading: 68ch;
+        --ed-paper:   #f7f3ea;
+        --ed-paper-2: #efe7d7;
+        --ed-paper-3: #f2ecdf;
+        --ed-ink:     #211a12;
+        --ed-ink-2:   #574d40;
+        --ed-ink-3:   #8c8170;
+        --ed-rule:    rgba(33,26,18,0.16);
+        --ed-rule-2:  rgba(33,26,18,0.32);
+        --ed-accent:  #a8502b;
+        --ed-accent-d:#883e1e;
+
+        --ed-serif: "Newsreader", Georgia, "Times New Roman", serif;
+        --ed-sans:  "Hanken Grotesk", system-ui, -apple-system, sans-serif;
+        --ed-mono:  "JetBrains Mono", ui-monospace, SFMono-Regular, monospace;
+
+        --ed-wrap: min(100% - 2.5rem, 74rem);
+        --ed-read: min(100% - 2.5rem, 40rem);
       }
 
       * { box-sizing: border-box; }
-
-      html {
-        font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      }
-
+      html, body { margin: 0; padding: 0; }
       body {
-        margin: 0;
-        background:
-          radial-gradient(circle at top left, rgba(138, 75, 44, 0.12), transparent 26rem),
-          linear-gradient(180deg, #fffdf9 0%, var(--bg) 22rem);
-        color: var(--text);
-        line-height: 1.75;
+        background: var(--ed-paper);
+        color: var(--ed-ink);
+        font-family: var(--ed-serif);
+        line-height: 1.6;
+        -webkit-font-smoothing: antialiased;
         text-rendering: optimizeLegibility;
       }
+      ::selection { background: #e7c3ab; color: var(--ed-ink); }
+      a { color: inherit; cursor: pointer; -webkit-tap-highlight-color: transparent; }
 
-      a {
-        color: var(--accent);
-        text-underline-offset: 0.18em;
+      /* ------------------------------------------------------- HELPERS */
+      .ed-wrap  { width: var(--ed-wrap); margin-inline: auto; }
+      .ed-read  { width: var(--ed-read); margin-inline: auto; }
+      .ed-shell { min-height: 100vh; display: flex; flex-direction: column; }
+
+      .ed-dept { font-family: var(--ed-sans); font-size: 0.7rem; font-weight: 700; letter-spacing: 0.18em; text-transform: uppercase; color: var(--ed-accent-d); margin: 0; }
+      .ed-meta { font-family: var(--ed-sans); font-size: 0.78rem; letter-spacing: 0.04em; color: var(--ed-ink-3); }
+      .ed-serif { font-family: var(--ed-serif); font-weight: 600; letter-spacing: -0.02em; }
+      .ed-ital { font-style: italic; color: var(--ed-accent-d); }
+
+      /* nav — centered, growing underline */
+      .ed-nav { font-family: var(--ed-sans); font-size: 0.82rem; font-weight: 600; letter-spacing: 0.04em; color: var(--ed-ink-2); text-decoration: none; padding: 0.35rem 0; position: relative; transition: color 140ms ease; }
+      .ed-nav::after { content: ""; position: absolute; left: 50%; right: 50%; bottom: 0; height: 1.5px; background: var(--ed-accent); transition: left 180ms ease, right 180ms ease; }
+      .ed-nav:hover { color: var(--ed-ink); }
+      .ed-nav:hover::after, .ed-nav.on::after { left: 0; right: 0; }
+      .ed-nav.on { color: var(--ed-ink); }
+
+      /* article entry in lists */
+      .ed-art { display: block; text-decoration: none; color: inherit; transition: opacity 140ms ease; }
+      .ed-art:hover .ed-art-h { color: var(--ed-accent-d); }
+      .ed-art-h { transition: color 150ms ease; }
+
+      .ed-link { color: var(--ed-accent-d); text-decoration: none; box-shadow: inset 0 -1px 0 var(--ed-accent); }
+      .ed-link:hover { background: #e7c3ab; }
+
+      .ed-btn { display: inline-flex; align-items: center; gap: 0.5rem; font-family: var(--ed-sans); font-size: 0.85rem; font-weight: 600; letter-spacing: 0.02em; padding: 0.8rem 1.4rem; background: var(--ed-ink); color: var(--ed-paper); border: 1px solid var(--ed-ink); text-decoration: none; transition: all 150ms ease; }
+      .ed-btn:hover { background: var(--ed-accent-d); border-color: var(--ed-accent-d); }
+      .ed-btn.ghost { background: transparent; color: var(--ed-ink); }
+      .ed-btn.ghost:hover { background: var(--ed-ink); color: var(--ed-paper); }
+
+      .ed-rule { border: 0; border-top: 1px solid var(--ed-rule); margin: 0; }
+
+      /* ---------------------------------------------------- MASTHEAD */
+      .ed-header { background: var(--ed-paper); border-bottom: 2px solid var(--ed-ink); position: sticky; top: 0; z-index: 30; }
+      .ed-dateline { display: flex; justify-content: space-between; align-items: center; padding: 0.5rem 0; font-family: var(--ed-mono); font-size: 0.64rem; letter-spacing: 0.16em; text-transform: uppercase; color: var(--ed-ink-3); }
+      .ed-titlebar { text-align: center; border-top: 1px solid var(--ed-rule); padding-top: 0.9rem; padding-bottom: 0.2rem; }
+      .ed-titlebar a { text-decoration: none; color: var(--ed-ink); }
+      .ed-wordmark { font-family: var(--ed-serif); font-weight: 600; letter-spacing: -0.01em; font-size: clamp(1.8rem, 4.4vw, 2.6rem); line-height: 1; }
+      .ed-wordmark .tld { color: var(--ed-accent); }
+      .ed-navbar { border-top: 1px solid var(--ed-rule); margin-top: 0.8rem; border-bottom: 1px solid var(--ed-rule); }
+      .ed-navlinks { display: flex; justify-content: center; gap: 2.2rem; flex-wrap: wrap; padding: 0.6rem 0; }
+
+      /* ------------------------------------------------------ FOOTER */
+      .ed-footer { border-top: 2px solid var(--ed-ink); margin-top: auto; background: var(--ed-paper); }
+      .ed-footer-inner { padding-top: 2.2rem; padding-bottom: 2.2rem; display: flex; justify-content: space-between; align-items: center; gap: 1.5rem; flex-wrap: wrap; }
+      .ed-footer-mark { font-family: var(--ed-serif); font-weight: 600; letter-spacing: -0.02em; font-size: 1.4rem; }
+      .ed-footer-mark .tld { color: var(--ed-accent); }
+      .ed-footer-links { display: flex; gap: 1.6rem; flex-wrap: wrap; }
+
+      /* --------------------------------------------------- ARTICLE PROSE */
+      .ed-drop::first-letter,
+      .ed-prose.ed-dropcap > p:first-of-type::first-letter {
+        font-family: var(--ed-serif); font-weight: 600; float: left;
+        font-size: 4.4rem; line-height: 0.74; padding: 0.28rem 0.7rem 0 0; color: var(--ed-accent-d);
       }
-
-      a:hover { text-decoration: none; }
-
-      .site-shell {
-        min-height: 100vh;
-        display: flex;
-        flex-direction: column;
+      .ed-prose { font-family: var(--ed-serif); font-size: 1.22rem; line-height: 1.74; color: var(--ed-ink); }
+      .ed-prose > :first-child { margin-top: 0; }
+      .ed-prose p { margin: 0 0 1.25rem; }
+      .ed-prose strong { font-weight: 600; color: var(--ed-ink); }
+      .ed-prose em { font-style: italic; }
+      .ed-prose a { color: var(--ed-accent-d); text-decoration: none; box-shadow: inset 0 -1px 0 var(--ed-accent); }
+      .ed-prose a:hover { background: #e7c3ab; }
+      .ed-prose h2 { font-family: var(--ed-serif); font-weight: 600; letter-spacing: -0.02em; font-size: 1.7rem; line-height: 1.15; margin: 2.6rem 0 0.8rem; }
+      .ed-prose h3 { font-family: var(--ed-serif); font-weight: 600; letter-spacing: -0.02em; font-size: 1.32rem; line-height: 1.2; margin: 2rem 0 0.5rem; }
+      .ed-prose ul, .ed-prose ol { padding-left: 1.4rem; margin: 0 0 1.25rem; }
+      .ed-prose li { margin: 0 0 0.5rem; }
+      .ed-prose li::marker { color: var(--ed-accent); }
+      .ed-prose blockquote {
+        margin: 2rem 0; border-left: 2px solid var(--ed-accent); padding-left: 1.4rem;
+        font-family: var(--ed-serif); font-weight: 500; font-size: 1.5rem; line-height: 1.3; color: var(--ed-ink); font-style: normal;
       }
+      .ed-prose blockquote p { margin: 0 0 0.6rem; }
+      .ed-prose code { font-family: var(--ed-mono); font-size: 0.84em; background: var(--ed-paper-2); border: 1px solid var(--ed-rule); padding: 0.1rem 0.3rem; }
+      .ed-prose pre { background: var(--ed-ink); color: var(--ed-paper); padding: 1.1rem 1.2rem; overflow: auto; font-family: var(--ed-mono); font-size: 0.86rem; line-height: 1.6; }
+      .ed-prose pre code { background: none; border: none; padding: 0; color: inherit; font-size: inherit; }
+      .ed-prose table { width: 100%; border-collapse: collapse; margin: 1.75rem 0; font-family: var(--ed-sans); font-size: 0.95rem; }
+      .ed-prose th, .ed-prose td { border: 1px solid var(--ed-rule-2); padding: 0.7rem 0.85rem; vertical-align: top; text-align: left; }
+      .ed-prose th { background: var(--ed-paper-2); font-size: 0.72rem; letter-spacing: 0.08em; text-transform: uppercase; font-weight: 700; }
 
-      .site-header {
-        border-bottom: 1px solid rgba(230, 222, 210, 0.8);
-        background: rgba(251, 250, 247, 0.82);
-        backdrop-filter: blur(14px);
-        position: sticky;
-        top: 0;
-        z-index: 10;
+      @media (prefers-reduced-motion: reduce) {
+        .ed-nav::after, .ed-art-h, .ed-btn { transition: none; }
       }
-
-      .site-header-inner,
-      .site-footer-inner,
-      .page {
-        width: min(calc(100% - 2rem), var(--max));
-        margin: 0 auto;
+      @media (max-width: 820px) {
+        .ed-2col { grid-template-columns: 1fr !important; }
+        .ed-hide-sm { display: none !important; }
       }
-
-      .site-header-inner {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        gap: 1.5rem;
-        padding: 1rem 0;
-      }
-
-      .brand {
-        color: var(--text);
-        text-decoration: none;
-        font-family: ui-serif, Georgia, Cambria, "Times New Roman", serif;
-        font-size: 1.12rem;
-        font-weight: 700;
-        letter-spacing: -0.025em;
-      }
-
-      .nav {
-        display: flex;
-        gap: 0.25rem;
-        flex-wrap: wrap;
-      }
-
-      .nav a {
-        border-radius: 999px;
-        color: var(--muted);
-        font-size: 0.92rem;
-        font-weight: 600;
-        padding: 0.42rem 0.72rem;
-        text-decoration: none;
-      }
-
-      .nav a:hover,
-      .nav a[aria-current='page'] {
-        background: var(--accent-soft);
-        color: var(--accent);
-      }
-
-      .page {
-        flex: 1;
-        padding: 5rem 0 5.5rem;
-      }
-
-      main, article {
-        width: min(100%, var(--reading));
-      }
-
-      .eyebrow {
-        display: inline-flex;
-        align-items: center;
-        margin-bottom: 1.25rem;
-        padding: 0.35rem 0.7rem;
-        border: 1px solid rgba(138, 75, 44, 0.18);
-        border-radius: 999px;
-        background: rgba(243, 226, 215, 0.7);
-        color: var(--accent);
-        font-size: 0.78rem;
-        font-weight: 800;
-        letter-spacing: 0.08em;
-        text-transform: uppercase;
-      }
-
-      h1, h2, h3 {
-        color: var(--text);
-        line-height: 1.05;
-        letter-spacing: -0.045em;
-      }
-
-      h1 {
-        max-width: 12ch;
-        font-family: ui-serif, Georgia, Cambria, "Times New Roman", serif;
-        font-size: clamp(3.1rem, 9vw, 6.4rem);
-        font-weight: 740;
-        margin: 0 0 1.4rem;
-      }
-
-      h2 {
-        margin: 3.25rem 0 1rem;
-        font-family: ui-serif, Georgia, Cambria, "Times New Roman", serif;
-        font-size: clamp(1.75rem, 4vw, 2.6rem);
-      }
-
-      h3 {
-        margin: 2.25rem 0 0.65rem;
-        font-size: 1.2rem;
-        letter-spacing: -0.025em;
-      }
-
-      p, li { color: var(--text); }
-
-      p {
-        margin: 0 0 1.1rem;
-      }
-
-      li + li {
-        margin-top: 0.35rem;
-      }
-
-      ul, ol {
-        padding-left: 1.3rem;
-      }
-
-      li::marker {
-        color: var(--accent);
-      }
-
-      .lede {
-        color: #3f3933;
-        font-size: clamp(1.18rem, 2vw, 1.42rem);
-        line-height: 1.55;
-      }
-
-      .muted { color: var(--muted); }
-
-      .stack {
-        display: grid;
-        gap: 1.35rem;
-      }
-
-      .hero-grid {
-        display: grid;
-        gap: 1.25rem;
-      }
-
-      .hero-panel {
-        padding: 1.5rem;
-        border: 1px solid var(--border);
-        border-radius: 1.75rem;
-        background:
-          linear-gradient(180deg, rgba(255,255,255,0.88), rgba(244,239,231,0.8)),
-          radial-gradient(circle at top right, rgba(138,75,44,0.14), transparent 14rem);
-        box-shadow: var(--shadow);
-      }
-
-      .hero-panel--accent {
-        background:
-          linear-gradient(135deg, rgba(138,75,44,0.12), rgba(255,255,255,0.88) 50%),
-          linear-gradient(180deg, rgba(255,255,255,0.95), rgba(244,239,231,0.9));
-      }
-
-      .hero-kicker {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 0.5rem;
-        margin-bottom: 1rem;
-      }
-
-      .stat-grid {
-        display: grid;
-        gap: 0.85rem;
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-        margin-top: 1rem;
-      }
-
-      .stat {
-        padding: 0.85rem 0.95rem;
-        border-radius: 1rem;
-        border: 1px solid rgba(138,75,44,0.14);
-        background: rgba(255,255,255,0.72);
-      }
-
-      .stat strong {
-        display: block;
-        font-size: 1rem;
-        margin-bottom: 0.2rem;
-      }
-
-      .callout {
-        padding: 1rem 1.1rem;
-        border-left: 4px solid var(--accent);
-        border-radius: 0 1rem 1rem 0;
-        background: rgba(255,255,255,0.68);
-      }
-
-      .callout p:last-child {
-        margin-bottom: 0;
-      }
-
-      .section {
-        margin-top: 3.5rem;
-      }
-
-      .card-grid {
-        display: grid;
-        gap: 1rem;
-      }
-
-      .card {
-        display: block;
-        padding: 1.25rem 1.35rem;
-        border: 1px solid var(--border);
-        border-radius: 1.25rem;
-        background: rgba(255, 255, 255, 0.76);
-        box-shadow: 0 1px 0 rgba(255, 255, 255, 0.9) inset;
-        color: inherit;
-        text-decoration: none;
-        transition: border-color 140ms ease, box-shadow 140ms ease, transform 140ms ease;
-      }
-
-      .card:hover {
-        border-color: var(--border-strong);
-        box-shadow: var(--shadow);
-        transform: translateY(-2px);
-      }
-
-      .card strong {
-        display: block;
-        font-size: 1.08rem;
-        letter-spacing: -0.02em;
-        line-height: 1.25;
-        margin-bottom: 0.4rem;
-      }
-
-      .card p:last-child {
-        margin-bottom: 0;
-      }
-
-      .meta-row {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 0.65rem;
-        margin: 1rem 0 1.5rem;
-        color: var(--muted);
-        font-size: 0.92rem;
-      }
-
-      .badge {
-        display: inline-flex;
-        align-items: center;
-        gap: 0.35rem;
-        padding: 0.22rem 0.62rem;
-        border: 1px solid var(--border);
-        border-radius: 999px;
-        background: rgba(255, 255, 255, 0.74);
-        color: var(--muted);
-        font-size: 0.86rem;
-      }
-
-      article {
-        max-width: var(--reading);
-      }
-
-      article :global(h2) {
-        padding-top: 0.5rem;
-        border-top: 1px solid var(--border);
-      }
-
-      article :global(table) {
-        width: 100%;
-        border-collapse: collapse;
-        margin: 1.75rem 0;
-        overflow: hidden;
-        border-radius: 0.85rem;
-        background: var(--surface);
-      }
-
-      article :global(th),
-      article :global(td) {
-        border: 1px solid var(--border);
-        padding: 0.85rem;
-        vertical-align: top;
-      }
-
-      article :global(th) {
-        background: var(--surface-soft);
-        text-align: left;
-      }
-
-      article :global(blockquote) {
-        margin: 1.75rem 0;
-        padding: 1rem 1.25rem;
-        border-left: 4px solid var(--accent);
-        border-radius: 0 1rem 1rem 0;
-        background: rgba(255, 255, 255, 0.6);
-        color: var(--muted);
-      }
-
-      article :global(code) {
-        border: 1px solid var(--border);
-        border-radius: 0.35rem;
-        background: rgba(255, 255, 255, 0.7);
-        font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
-        font-size: 0.9em;
-        padding: 0.1rem 0.25rem;
-      }
-
-      .site-footer {
-        border-top: 1px solid var(--border);
-        margin-top: auto;
-        background: rgba(255, 255, 255, 0.45);
-      }
-
-      .site-footer-inner {
-        padding: 1.5rem 0 2.25rem;
-        color: var(--muted);
-        font-size: 0.92rem;
-      }
-
-      .site-footer-inner p {
-        margin: 0.35rem 0;
-      }
-
-      @media (max-width: 720px) {
-        .site-header-inner {
-          align-items: flex-start;
-          flex-direction: column;
-        }
-
-        .page {
-          padding-top: 3rem;
-        }
-
-        h1 {
-          max-width: 100%;
-        }
+      @media (max-width: 540px) {
+        .ed-row-sm { grid-template-columns: 1fr !important; gap: 0.5rem !important; }
+        .ed-row-sm .ed-meta-date { padding-top: 0 !important; }
       }
     </style>
   </head>
   <body>
-    <div class="site-shell">
-      <header class="site-header">
-        <div class="site-header-inner">
-          <a class="brand" href="/">francanete.dev</a>
-          <nav class="nav" aria-label="Primary">
-            {primaryNav.map((item) => (
-              <a href={item.href} aria-current={Astro.url.pathname === item.href ? 'page' : undefined}>
+    <div class="ed-shell">
+      <header class="ed-header">
+        <div class="ed-wrap ed-dateline">
+          <span>Vol. I</span>
+          <span class="ed-hide-sm">A journal on how machines read the web</span>
+          <span>No. 01 · 2026</span>
+        </div>
+        <div class="ed-wrap ed-titlebar">
+          <a href="/"><span class="ed-wordmark">francanete<span class="tld">.dev</span></span></a>
+        </div>
+        <div class="ed-navbar">
+          <nav class="ed-wrap ed-navlinks" aria-label="Primary">
+            {nav.map((item) => (
+              <a class={`ed-nav${isActive(item.href) ? ' on' : ''}`} href={item.href} aria-current={isActive(item.href) ? 'page' : undefined}>
                 {item.label}
               </a>
             ))}
           </nav>
         </div>
       </header>
-      <div class="page">
-        <slot />
-      </div>
-      <footer class="site-footer">
-        <div class="site-footer-inner">
-          <p>{siteDescription}</p>
-          <p>
-            Static, crawlable pages. No auth, no dashboard, no CMS-first complexity.
-          </p>
+
+      <slot />
+
+      <footer class="ed-footer">
+        <div class="ed-wrap ed-footer-inner">
+          <span class="ed-footer-mark">francanete<span class="tld">.dev</span></span>
+          <div class="ed-footer-links">
+            <a class="ed-nav" href="/research/">Research</a>
+            <a class="ed-nav" href="/methodology/">Methodology</a>
+            <a class="ed-nav" href="/rss.xml">RSS</a>
+          </div>
+          <span class="ed-meta">© 2026 francanete.dev</span>
         </div>
       </footer>
     </div>
