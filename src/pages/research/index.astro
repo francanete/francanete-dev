@@ -19,14 +19,13 @@ const entries = (await getCollection('research'))
 
     <section class="ed-wrap" style="padding-top:1rem;padding-bottom:4rem;">
       {entries.map((entry) => (
-        <a class="ed-art" href={`/research/${entry.slug}/`} style="display:block;border-top:1px solid var(--ed-rule);padding:1.6rem 0;">
+        <a class="ed-art" href={`/research/${entry.slug}/`} style="display:block;padding:1.6rem 0;">
           <p class="ed-dept">Research</p>
           <h3 class="ed-art-h ed-serif" style="font-size:1.8rem;line-height:1.12;margin:0.5rem 0;max-width:28ch;">{entry.data.title}</h3>
           <p style="font-family:var(--ed-serif);font-size:1.08rem;line-height:1.5;color:var(--ed-ink-2);margin:0 0 0.6rem;max-width:60ch;">{entry.data.description}</p>
           <p class="ed-meta">{siteAuthor} · {monthYear(entry.data.date)} · {readingTime(entry.body)}</p>
         </a>
       ))}
-      <hr class="ed-rule" />
     </section>
   </main>
 </BaseLayout>

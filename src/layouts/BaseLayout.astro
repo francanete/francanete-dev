@@ -116,8 +116,8 @@ const nav = [
       .ed-ital { font-style: italic; color: var(--ed-accent-d); }
 
       /* nav — centered, growing underline */
-      .ed-nav { font-family: var(--ed-sans); font-size: 0.82rem; font-weight: 600; letter-spacing: 0.04em; color: var(--ed-ink-2); text-decoration: none; padding: 0.35rem 0; position: relative; transition: color 140ms ease; }
-      .ed-nav::after { content: ""; position: absolute; left: 50%; right: 50%; bottom: 0; height: 1.5px; background: var(--ed-accent); transition: left 180ms ease, right 180ms ease; }
+      .ed-nav { font-family: var(--ed-sans); font-size: 0.74rem; font-weight: 600; letter-spacing: 0.08em; color: var(--ed-ink-2); text-decoration: none; padding: 0.18rem 0; position: relative; transition: color 140ms ease; text-transform: uppercase; }
+      .ed-nav::after { content: ""; position: absolute; left: 50%; right: 50%; bottom: -1px; height: 1px; background: var(--ed-accent); transition: left 180ms ease, right 180ms ease; }
       .ed-nav:hover { color: var(--ed-ink); }
       .ed-nav:hover::after, .ed-nav.on::after { left: 0; right: 0; }
       .ed-nav.on { color: var(--ed-ink); }
@@ -138,21 +138,28 @@ const nav = [
       .ed-rule { border: 0; border-top: 1px solid var(--ed-rule); margin: 0; }
 
       /* ---------------------------------------------------- MASTHEAD */
-      .ed-header { background: var(--ed-paper); border-bottom: 2px solid var(--ed-ink); position: sticky; top: 0; z-index: 30; }
-      .ed-dateline { display: flex; justify-content: space-between; align-items: center; padding: 0.5rem 0; font-family: var(--ed-mono); font-size: 0.64rem; letter-spacing: 0.16em; text-transform: uppercase; color: var(--ed-ink-3); }
-      .ed-titlebar { text-align: center; border-top: 1px solid var(--ed-rule); padding-top: 0.9rem; padding-bottom: 0.2rem; }
-      .ed-titlebar a { text-decoration: none; color: var(--ed-ink); }
-      .ed-wordmark { font-family: var(--ed-serif); font-weight: 600; letter-spacing: -0.01em; font-size: clamp(1.8rem, 4.4vw, 2.6rem); line-height: 1; }
-      .ed-wordmark .tld { color: var(--ed-accent); }
-      .ed-navbar { border-top: 1px solid var(--ed-rule); margin-top: 0.8rem; border-bottom: 1px solid var(--ed-rule); }
-      .ed-navlinks { display: flex; justify-content: center; gap: 2.2rem; flex-wrap: wrap; padding: 0.6rem 0; }
+      .ed-header { background: var(--ed-paper); position: sticky; top: 0; z-index: 30; }
+      .ed-headerbar {
+        display: grid;
+        grid-template-columns: 1fr auto 1fr;
+        align-items: center;
+        gap: 1rem;
+        min-height: 3.25rem;
+        border-top: 1px solid var(--ed-rule);
+      }
+      .ed-headerbar a { text-decoration: none; color: var(--ed-ink); }
+      .ed-brand { justify-self: start; font-family: var(--ed-serif); font-weight: 600; letter-spacing: -0.01em; font-size: 1.02rem; line-height: 1; }
+      .ed-brand .tld { color: var(--ed-accent); }
+      .ed-subhead { justify-self: center; margin: 0; font-family: var(--ed-sans); font-size: 0.72rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--ed-ink-3); text-align: center; }
+      .ed-navbar { justify-self: end; }
+      .ed-navlinks { display: flex; justify-content: flex-end; gap: 1rem; flex-wrap: wrap; }
 
       /* ------------------------------------------------------ FOOTER */
-      .ed-footer { border-top: 2px solid var(--ed-ink); margin-top: auto; background: var(--ed-paper); }
-      .ed-footer-inner { padding-top: 2.2rem; padding-bottom: 2.2rem; display: flex; justify-content: space-between; align-items: center; gap: 1.5rem; flex-wrap: wrap; }
-      .ed-footer-mark { font-family: var(--ed-serif); font-weight: 600; letter-spacing: -0.02em; font-size: 1.4rem; }
+      .ed-footer { margin-top: auto; background: var(--ed-paper); }
+      .ed-footer-inner { min-height: 3.25rem; display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; gap: 1rem; border-top: 1px solid var(--ed-rule); }
+      .ed-footer-mark { justify-self: start; font-family: var(--ed-serif); font-weight: 600; letter-spacing: -0.01em; font-size: 1.02rem; }
       .ed-footer-mark .tld { color: var(--ed-accent); }
-      .ed-footer-links { display: flex; gap: 1.6rem; flex-wrap: wrap; }
+      .ed-footer-links { display: flex; gap: 1rem; flex-wrap: wrap; justify-content: center; }
 
       /* --------------------------------------------------- ARTICLE PROSE */
       .ed-drop::first-letter,
@@ -190,6 +197,31 @@ const nav = [
       @media (max-width: 820px) {
         .ed-2col { grid-template-columns: 1fr !important; }
         .ed-hide-sm { display: none !important; }
+        .ed-headerbar {
+          grid-template-columns: 1fr;
+          gap: 0.35rem;
+          padding-top: 0.45rem;
+          padding-bottom: 0.45rem;
+        }
+        .ed-brand,
+        .ed-subhead,
+        .ed-navbar {
+          justify-self: center;
+        }
+        .ed-navbar {
+          width: 100%;
+        }
+        .ed-navlinks {
+          justify-content: center;
+          gap: 0.85rem;
+          padding-top: 0.1rem;
+          border-top: 1px solid var(--ed-rule);
+          margin-top: 0.15rem;
+          padding-bottom: 0;
+        }
+        .ed-nav {
+          font-size: 0.7rem;
+        }
       }
       @media (max-width: 540px) {
         .ed-row-sm { grid-template-columns: 1fr !important; gap: 0.5rem !important; }
@@ -200,21 +232,17 @@ const nav = [
   <body>
     <div class="ed-shell">
       <header class="ed-header">
-        <div class="ed-wrap ed-dateline">
-          <span>Vol. I</span>
-          <span class="ed-hide-sm">A journal on how machines read the web</span>
-          <span>No. 01 · 2026</span>
-        </div>
-        <div class="ed-wrap ed-titlebar">
-          <a href="/"><span class="ed-wordmark">francanete<span class="tld">.dev</span></span></a>
-        </div>
-        <div class="ed-navbar">
-          <nav class="ed-wrap ed-navlinks" aria-label="Primary">
-            {nav.map((item) => (
-              <a class={`ed-nav${isActive(item.href) ? ' on' : ''}`} href={item.href} aria-current={isActive(item.href) ? 'page' : undefined}>
-                {item.label}
-              </a>
-            ))}
+        <div class="ed-wrap ed-headerbar">
+          <a class="ed-brand" href="/">francanete<span class="tld">.dev</span></a>
+          <p class="ed-subhead">A journal on how machines read the web</p>
+          <nav class="ed-navbar" aria-label="Primary">
+            <div class="ed-navlinks">
+              {nav.map((item) => (
+                <a class={`ed-nav${isActive(item.href) ? ' on' : ''}`} href={item.href} aria-current={isActive(item.href) ? 'page' : undefined}>
+                  {item.label}
+                </a>
+              ))}
+            </div>
           </nav>
         </div>
       </header>
@@ -229,7 +257,7 @@ const nav = [
             <a class="ed-nav" href="/methodology/">Methodology</a>
             <a class="ed-nav" href="/rss.xml">RSS</a>
           </div>
-          <span class="ed-meta">© 2026 francanete.dev</span>
+          <span class="ed-meta" style="justify-self:end;">© 2026</span>
         </div>
       </footer>
     </div>

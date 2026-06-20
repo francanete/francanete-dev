@@ -38,9 +38,11 @@ const jsonLd = [
       <p class="ed-dept">Research</p>
       <h1 class="ed-serif" style="font-size:clamp(2.3rem, 5vw, 3.8rem);line-height:1.06;margin:0.9rem auto 1.1rem;max-width:20ch;">{entry.data.title}</h1>
       <p style="font-family:var(--ed-serif);font-style:italic;font-size:1.35rem;line-height:1.45;color:var(--ed-ink-2);max-width:44ch;margin:0 auto 1.4rem;">{entry.data.description}</p>
-      <div style="display:inline-flex;align-items:center;gap:0.9rem;border-top:1px solid var(--ed-rule);border-bottom:1px solid var(--ed-rule);padding:0.7rem 0;">
+      <div style="display:flex;flex-wrap:wrap;justify-content:center;gap:0.9rem 1.2rem;border-top:1px solid var(--ed-rule);border-bottom:1px solid var(--ed-rule);padding:0.7rem 0;">
         <span class="ed-meta" style="color:var(--ed-ink);">By {siteAuthor}</span>
-        <span style="width:3px;height:3px;border-radius:999px;background:var(--ed-ink-3);"></span>
+        <span class="ed-meta">Evidence: {entry.data.evidenceGrade}</span>
+        <span class="ed-meta">Published: {entry.data.date.toISOString().slice(0, 10)}</span>
+        {entry.data.updated && <span class="ed-meta">Updated: {entry.data.updated.toISOString().slice(0, 10)}</span>}
         <span class="ed-meta">{monthYear(entry.data.date)} · {readingTime(entry.body)}</span>
       </div>
     </div>

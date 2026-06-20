@@ -7,7 +7,6 @@ export async function GET() {
     `${siteUrl}/`,
     `${siteUrl}/research/`,
     `${siteUrl}/methodology/`,
-    `${siteUrl}/glossary/`,
     ...research.map((entry) => `${siteUrl}/research/${entry.slug}/`),
   ];
 

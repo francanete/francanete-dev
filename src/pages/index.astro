@@ -21,16 +21,12 @@ const pieces = entries.map((entry, i) => ({
 <BaseLayout title={siteTitle} description={siteDescription} canonical={siteUrl}>
   <main>
     <section class="ed-wrap" style="padding-top:2.4rem;padding-bottom:4rem;">
-      <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:0.4rem;">
-        <p class="ed-dept">Latest writing</p>
-        <a class="ed-nav" href="/research/">Browse by department →</a>
-      </div>
 
       {pieces.map((p) => (
         <a
           class="ed-art ed-row-sm"
           href={`/research/${p.slug}/`}
-          style={`display:grid;grid-template-columns:5.5rem 1fr;gap:1.6rem;align-items:baseline;border-top:1px solid var(--ed-rule);padding:${p.lead ? '1.8rem 0' : '1.4rem 0'};`}
+          style={`display:grid;grid-template-columns:5.5rem 1fr;gap:1.6rem;align-items:baseline;padding:${p.lead ? '1.8rem 0' : '1.4rem 0'};`}
         >
           <span class="ed-meta ed-meta-date" style="padding-top:0.35rem;white-space:nowrap;">{p.date}</span>
           <div>
@@ -41,7 +37,6 @@ const pieces = entries.map((entry, i) => ({
           </div>
         </a>
       ))}
-      <hr class="ed-rule" />
     </section>
   </main>
 </BaseLayout>
