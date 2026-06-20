@@ -3,18 +3,18 @@ import { siteUrl } from '../lib/site';
 
 export async function GET() {
   const [research, experiments] = await Promise.all([getCollection('research'), getCollection('experiments')]);
-  const items = [...research, ...experiments]
-    .sort((a, b) => b.data.date.getTime() - a.data.date.getTime())
-    .map((entry) => {
-      const base = research.includes(entry) ? '/research/' : '/experiments/';
-      return `
+  const items = [
+    ...research.map((entry) => ({ entry, base: '/research/' })),
+    ...experiments.map((entry) => ({ entry, base: '/experiments/' })),
+  ]
+    .sort((a, b) => b.entry.data.date.getTime() - a.entry.data.date.getTime())
+    .map(({ entry, base }) => `
         <item>
           <title>${entry.data.title}</title>
           <link>${siteUrl}${base}${entry.slug}/</link>
           <description>${entry.data.description}</description>
           <pubDate>${entry.data.date.toUTCString()}</pubDate>
-        </item>`;
-    })
+        </item>`)
     .join('');
 
   const rss = `<?xml version="1.0" encoding="UTF-8" ?>
