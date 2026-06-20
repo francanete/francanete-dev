@@ -38,7 +38,15 @@ const nav = [
     <meta property="og:url" content={canonical} />
     <meta property="og:site_name" content={siteTitle} />
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="theme-color" content="#f7f3ea" />
+    <script is:inline>
+      (() => {
+        const stored = localStorage.getItem('theme');
+        const systemDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+        const theme = stored === 'light' || stored === 'dark' ? stored : (systemDark ? 'dark' : 'light');
+        document.documentElement.dataset.theme = theme;
+      })();
+    </script>
+    <meta name="theme-color" content="#ebe7e4" />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <link rel="alternate" type="application/rss+xml" title={siteTitle} href="/rss.xml" />
     <link rel="preload" as="font" type="font/woff2" href="/fonts/Newsreader-Variable.woff2" crossorigin />
@@ -70,19 +78,22 @@ const nav = [
       }
 
       /* --------------------------------------------------------- TOKENS */
-      /* The Review: warm ivory, brown-black ink, editorial terracotta */
       :root {
         color-scheme: light;
-        --ed-paper:   #f7f3ea;
-        --ed-paper-2: #efe7d7;
-        --ed-paper-3: #f2ecdf;
-        --ed-ink:     #211a12;
-        --ed-ink-2:   #574d40;
-        --ed-ink-3:   #8c8170;
-        --ed-rule:    rgba(33,26,18,0.16);
-        --ed-rule-2:  rgba(33,26,18,0.32);
-        --ed-accent:  #a8502b;
-        --ed-accent-d:#883e1e;
+        --ed-paper:   #ebe7e4;
+        --ed-paper-2: #f3f2f0;
+        --ed-paper-3: #f0f2f3;
+        --ed-ink:     #252f3d;
+        --ed-ink-2:   #5c5752;
+        --ed-ink-3:   #8b847d;
+        --ed-rule:    rgba(91,87,82,0.22);
+        --ed-rule-2:  rgba(91,87,82,0.38);
+        --ed-accent:  #4b607c;
+        --ed-accent-d:#252f3d;
+        --ed-selection: #4b607c24;
+        --ed-link-hover: #4b607c12;
+        --ed-header-bg: rgba(243,242,240,0.78);
+        --ed-body-start: #f8f8f2;
 
         --ed-serif: "Newsreader", Georgia, "Times New Roman", serif;
         --ed-sans:  "Hanken Grotesk", system-ui, -apple-system, sans-serif;
@@ -92,11 +103,29 @@ const nav = [
         --ed-read: min(100% - 2.5rem, 40rem);
       }
 
+      :root[data-theme='dark'] {
+        color-scheme: dark;
+        --ed-paper:   #161d27;
+        --ed-paper-2: #212730;
+        --ed-paper-3: #252f3d;
+        --ed-ink:     #ebe7e4;
+        --ed-ink-2:   #d5d8db;
+        --ed-ink-3:   #9fa4ab;
+        --ed-rule:    rgba(73,80,89,0.5);
+        --ed-rule-2:  rgba(117,125,137,0.45);
+        --ed-accent:  #6a9fcc;
+        --ed-accent-d:#ebe7e4;
+        --ed-selection: #6a9fcc3d;
+        --ed-link-hover: #6a9fcc13;
+        --ed-header-bg: rgba(13,17,22,0.78);
+        --ed-body-start: #0d1116;
+      }
+
       * { box-sizing: border-box; }
       html, body { margin: 0; padding: 0; }
       body {
         background:
-          radial-gradient(120% 72% at 50% -8%, #fdfaf3 0%, var(--ed-paper) 46%, var(--ed-paper-3) 100%)
+          radial-gradient(120% 72% at 50% -8%, var(--ed-body-start) 0%, var(--ed-paper) 46%, var(--ed-paper-3) 100%)
           var(--ed-paper) fixed;
         color: var(--ed-ink);
         font-family: var(--ed-serif);
@@ -104,7 +133,7 @@ const nav = [
         -webkit-font-smoothing: antialiased;
         text-rendering: optimizeLegibility;
       }
-      ::selection { background: #e7c3ab; color: var(--ed-ink); }
+      ::selection { background: var(--ed-selection); color: var(--ed-ink); }
       a { color: inherit; cursor: pointer; -webkit-tap-highlight-color: transparent; }
 
       /* ------------------------------------------------------- HELPERS */
@@ -124,13 +153,36 @@ const nav = [
       .ed-nav:hover::after, .ed-nav.on::after { left: 0; right: 0; }
       .ed-nav.on { color: var(--ed-ink); }
 
+      .ed-theme-toggle {
+        appearance: none;
+        border: 0;
+        background: transparent;
+        color: var(--ed-ink-2);
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 2rem;
+        height: 2rem;
+        padding: 0;
+        cursor: pointer;
+        transition: color 140ms ease, background 140ms ease;
+      }
+      .ed-theme-toggle:hover {
+        color: var(--ed-ink);
+        background: var(--ed-link-hover);
+      }
+      .ed-theme-toggle svg {
+        width: 0.9rem;
+        height: 0.9rem;
+      }
+
       /* article entry in lists */
       .ed-art { display: block; text-decoration: none; color: inherit; transition: opacity 140ms ease; }
-      .ed-art:hover .ed-art-h { color: var(--ed-accent-d); }
+      .ed-art:hover .ed-art-h { color: var(--ed-accent); }
       .ed-art-h { transition: color 150ms ease; }
 
-      .ed-link { color: var(--ed-accent-d); text-decoration: none; box-shadow: inset 0 -1px 0 var(--ed-accent); }
-      .ed-link:hover { background: #e7c3ab; }
+      .ed-link { color: var(--ed-accent); text-decoration: none; box-shadow: inset 0 -1px 0 var(--ed-accent); }
+      .ed-link:hover { background: var(--ed-link-hover); }
 
       .ed-btn { display: inline-flex; align-items: center; gap: 0.5rem; font-family: var(--ed-sans); font-size: 0.85rem; font-weight: 600; letter-spacing: 0.02em; padding: 0.8rem 1.4rem; background: var(--ed-ink); color: var(--ed-paper); border: 1px solid var(--ed-ink); text-decoration: none; transition: all 150ms ease; }
       .ed-btn:hover { background: var(--ed-accent-d); border-color: var(--ed-accent-d); }
@@ -142,7 +194,7 @@ const nav = [
       /* ---------------------------------------------------- MASTHEAD */
       .ed-header {
         position: sticky; top: 0; z-index: 30;
-        background: rgba(248,244,236,0.72);
+        background: var(--ed-header-bg);
         backdrop-filter: saturate(1.1) blur(10px);
         -webkit-backdrop-filter: saturate(1.1) blur(10px);
       }
@@ -180,8 +232,8 @@ const nav = [
       .ed-prose p { margin: 0 0 1.25rem; }
       .ed-prose strong { font-weight: 600; color: var(--ed-ink); }
       .ed-prose em { font-style: italic; }
-      .ed-prose a { color: var(--ed-accent-d); text-decoration: none; box-shadow: inset 0 -1px 0 var(--ed-accent); }
-      .ed-prose a:hover { background: #e7c3ab; }
+      .ed-prose a { color: var(--ed-accent); text-decoration: none; box-shadow: inset 0 -1px 0 var(--ed-accent); }
+      .ed-prose a:hover { background: var(--ed-link-hover); }
       .ed-prose h2 { font-family: var(--ed-serif); font-weight: 600; letter-spacing: -0.02em; font-size: 1.7rem; line-height: 1.15; margin: 2.6rem 0 0.8rem; }
       .ed-prose h3 { font-family: var(--ed-serif); font-weight: 600; letter-spacing: -0.02em; font-size: 1.32rem; line-height: 1.2; margin: 2rem 0 0.5rem; }
       .ed-prose ul, .ed-prose ol { padding-left: 1.4rem; margin: 0 0 1.25rem; }
@@ -189,7 +241,7 @@ const nav = [
       .ed-prose li::marker { color: var(--ed-accent); }
       .ed-prose blockquote {
         margin: 2.6rem 0; padding: 0;
-        font-family: var(--ed-serif); font-weight: 500; font-size: 1.62rem; line-height: 1.36; color: var(--ed-accent-d); font-style: italic;
+        font-family: var(--ed-serif); font-weight: 500; font-size: 1.62rem; line-height: 1.36; color: var(--ed-accent); font-style: italic;
       }
       .ed-prose blockquote p { margin: 0 0 0.6rem; }
       .ed-prose code { font-family: var(--ed-mono); font-size: 0.84em; background: var(--ed-paper-2); padding: 0.12rem 0.34rem; border-radius: 2px; }
@@ -210,7 +262,7 @@ const nav = [
         margin: 1.2rem auto 0; max-width: 16ch; color: var(--ed-ink);
         text-wrap: balance;
       }
-      .ed-hero em { font-style: italic; color: var(--ed-accent-d); }
+      .ed-hero em { font-style: italic; color: var(--ed-accent); }
 
       /* ------------------------------------------------- FRONT-PAGE GRID */
       .ed-front { display: grid; grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr); gap: 5.5rem; align-items: start; }
@@ -267,6 +319,12 @@ const nav = [
         .ed-feed-h { font-size: 1.6rem; }
         .ed-row-sm { grid-template-columns: 1fr !important; gap: 0.5rem !important; }
         .ed-row-sm .ed-meta-date { padding-top: 0 !important; }
+        .ed-footer-inner {
+          grid-template-columns: 1fr;
+          justify-items: center;
+          text-align: center;
+          padding: 1rem 0 1.5rem;
+        }
       }
     </style>
   </head>
@@ -298,9 +356,40 @@ const nav = [
             <a class="ed-nav" href="/methodology/">Methodology</a>
             <a class="ed-nav" href="/rss.xml">RSS</a>
           </div>
-          <span class="ed-meta" style="justify-self:end;">© 2026</span>
+          <div style="justify-self:end;display:flex;align-items:center;gap:0.75rem;">
+            <button class="ed-theme-toggle" type="button" aria-label="Toggle color theme" aria-pressed="false" data-theme-toggle>
+              <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="currentColor" d="M12 2.25a.75.75 0 0 1 .75.75v2.25a.75.75 0 0 1-1.5 0V3a.75.75 0 0 1 .75-.75ZM7.5 12a4.5 4.5 0 1 1 9 0 4.5 4.5 0 0 1-9 0ZM18.894 6.166a.75.75 0 0 0-1.06-1.06l-1.591 1.59a.75.75 0 1 0 1.06 1.061l1.591-1.59ZM21.75 12a.75.75 0 0 1-.75.75h-2.25a.75.75 0 0 1 0-1.5H21a.75.75 0 0 1 .75.75ZM17.834 18.894a.75.75 0 0 0 1.06-1.06l-1.59-1.591a.75.75 0 1 0-1.061 1.06l1.59 1.591ZM12 18a.75.75 0 0 1 .75.75V21a.75.75 0 0 1-1.5 0v-2.25A.75.75 0 0 1 12 18ZM7.758 17.303a.75.75 0 0 0-1.061-1.06l-1.591 1.59a.75.75 0 0 0 1.06 1.061l1.591-1.59ZM6 12a.75.75 0 0 1-.75.75H3a.75.75 0 0 1 0-1.5h2.25A.75.75 0 0 1 6 12ZM6.697 7.757a.75.75 0 0 0 1.06-1.06l-1.59-1.591a.75.75 0 0 0-1.061 1.06l1.59 1.591Z"/></svg>
+            </button>
+            <span class="ed-meta">© 2026</span>
+          </div>
         </div>
       </footer>
     </div>
+    <script is:inline>
+      (() => {
+        const root = document.documentElement;
+        const button = document.querySelector('[data-theme-toggle]');
+        const meta = document.querySelector('meta[name="theme-color"]');
+
+        const palette = {
+          light: '#ebe7e4',
+          dark: '#161d27',
+        };
+
+        const apply = (theme) => {
+          root.dataset.theme = theme;
+          if (button) button.setAttribute('aria-pressed', theme === 'dark' ? 'true' : 'false');
+          if (meta) meta.setAttribute('content', palette[theme]);
+        };
+
+        apply(root.dataset.theme === 'dark' ? 'dark' : 'light');
+
+        button?.addEventListener('click', () => {
+          const next = root.dataset.theme === 'dark' ? 'light' : 'dark';
+          localStorage.setItem('theme', next);
+          apply(next);
+        });
+      })();
+    </script>
   </body>
 </html>
