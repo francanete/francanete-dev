@@ -22,7 +22,7 @@ export async function GET() {
   <channel>
     <title>francanete.dev</title>
     <link>${siteUrl}</link>
-    <description>GEO research and experiments</description>${items}
+    <description>AI software lab research and experiments</description>${items}
   </channel>
 </rss>`;
 

@@ -1,0 +1,30 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+<BaseLayout title="Sources | francanete.dev" description="Primary sources and reference material behind the site.">
+  <main>
+    <section class="ed-wrap" style="padding-top:4rem;text-align:center;">
+      <p class="ed-dept">Reference trail</p>
+      <h1 class="ed-serif" style="font-size:clamp(2.4rem, 5vw, 4rem);margin:0.9rem 0 0.8rem;">Sources</h1>
+      <p style="font-family:var(--ed-serif);font-style:italic;font-size:1.25rem;line-height:1.5;color:var(--ed-ink-2);max-width:48ch;margin:0 auto;">
+        A lightweight source hub for the pages on this site.
+      </p>
+    </section>
+
+    <article class="ed-read ed-prose" style="margin-top:3.5rem;padding-bottom:4rem;">
+      <p>
+        The lab publishes research, experiments, and working methods. This page gives agents and readers a small reference trail into that material.
+      </p>
+      <h2>Primary internal references</h2>
+      <ul>
+        <li><a href="/research/">Research articles</a></li>
+        <li><a href="/experiments/">Experiments</a></li>
+        <li><a href="/methods/">Methods</a></li>
+        <li><a href="/glossary/">Glossary</a></li>
+      </ul>
+
+      <h2>Repository source of truth</h2>
+      <p><code>geo-research.md</code> remains the strategic memo that guides the site.</p>
+    </article>
+  </main>
+</BaseLayout>

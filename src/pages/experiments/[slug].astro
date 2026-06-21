@@ -1,7 +1,7 @@
 ---
 import { getCollection, render } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
-import { buildArticleJsonLd } from '../../lib/schema';
+import { buildArticleJsonLd, buildBreadcrumbJsonLd } from '../../lib/schema';
 import { monthYear, readingTime } from '../../lib/reading';
 import { siteAuthor } from '../../lib/site';
 
@@ -15,6 +15,11 @@ const { entry } = Astro.props;
 const { Content } = await render(entry);
 const canonical = entry.data.canonical ?? `https://francanete.dev/experiments/${entry.slug}/`;
 const jsonLd = [
+  buildBreadcrumbJsonLd([
+    { name: 'Cover', url: 'https://francanete.dev/' },
+    { name: 'Experiments', url: 'https://francanete.dev/experiments/' },
+    { name: entry.data.title, url: canonical },
+  ]),
   buildArticleJsonLd({
     title: entry.data.title,
     description: entry.data.description,
@@ -61,7 +66,8 @@ const jsonLd = [
         <div style="display:flex;flex-wrap:wrap;gap:0.75rem 1.25rem;">
           <a class="ed-nav" href="/experiments/">All experiments</a>
           <a class="ed-nav" href="/research/">Research</a>
-          <a class="ed-nav" href="/methodology/">Methodology</a>
+          <a class="ed-nav" href="/methods/">Methods</a>
+          <a class="ed-nav" href="/about/">About the lab</a>
           <a class="ed-nav" href="/">Cover</a>
         </div>
       </div>
