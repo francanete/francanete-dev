@@ -35,13 +35,34 @@ const entries = [
 const [lead, ...rest] = entries;
 const railItems = rest.slice(0, 2);
 const gridItems = rest.slice(2);
-const dateline = lead ? lead.date : monthYear(new Date());
 ---
 <BaseLayout title={siteTitle} description={siteDescription} canonical={siteUrl}>
   <main>
     <section class="ed-wrap ed-flag">
-      <p class="ed-dateline">{dateline}</p>
       <h1 class="ed-hero">{siteTagline}</h1>
+      <p style="font-family:var(--ed-serif);font-style:italic;font-size:1.18rem;line-height:1.55;color:var(--ed-ink-2);max-width:42rem;margin:1.25rem auto 0;">
+        This site is organized as a small library of research, experiments, and methodology notes so people and AI agents can find one topic per page, follow clear links, and read stable URLs.
+      </p>
+    </section>
+
+    <section class="ed-wrap" style="padding-top:2.75rem;padding-bottom:1.5rem;">
+      <div class="ed-grid3">
+        <a class="ed-art" href="/research/">
+          <p class="ed-dept" style="margin-bottom:0.55rem;">Research</p>
+          <h2 class="ed-art-h ed-serif" style="font-size:1.4rem;line-height:1.18;margin:0 0 0.5rem;">Evidence-backed articles</h2>
+          <p class="ed-meta" style="font-size:0.92rem;letter-spacing:0.01em;">Studies, analyses, and dated findings about AI systems, citations, retrieval, and the open web.</p>
+        </a>
+        <a class="ed-art" href="/experiments/">
+          <p class="ed-dept" style="margin-bottom:0.55rem;">Experiments</p>
+          <h2 class="ed-art-h ed-serif" style="font-size:1.4rem;line-height:1.18;margin:0 0 0.5rem;">Tests and prototypes</h2>
+          <p class="ed-meta" style="font-size:0.92rem;letter-spacing:0.01em;">Smaller implementation tests, product ideas, interface checks, and technical proofs of concept.</p>
+        </a>
+        <a class="ed-art" href="/methodology/">
+          <p class="ed-dept" style="margin-bottom:0.55rem;">Methodology</p>
+          <h2 class="ed-art-h ed-serif" style="font-size:1.4rem;line-height:1.18;margin:0 0 0.5rem;">How pages are evaluated</h2>
+          <p class="ed-meta" style="font-size:0.92rem;letter-spacing:0.01em;">Evidence standards, publishing rules, and the structure used to keep pages easy to read and cite.</p>
+        </a>
+      </div>
     </section>
 
     {lead && (

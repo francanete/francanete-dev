@@ -1,7 +1,7 @@
 export const siteTitle = 'francanete.dev';
 export const siteDescription =
-  'A site for my AI and software experiments.';
-export const siteTagline = 'A site for my AI and software experiments.';
+  'AI research and experiments.';
+export const siteTagline = 'AI research and experiments.';
 export const siteUrl = 'https://francanete.dev';
 export const siteAuthor = 'Francanete';
 
