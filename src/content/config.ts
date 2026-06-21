@@ -15,9 +15,23 @@ const research = defineCollection({
   }),
 });
 
+const experiments = defineCollection({
+  type: 'content',
+  schema: z.object({
+    title: z.string(),
+    description: z.string(),
+    date: z.coerce.date(),
+    updated: z.coerce.date().optional(),
+    status: z.enum(['planned', 'running', 'complete']).default('planned'),
+    engines: z.array(z.string()).default([]),
+    tags: z.array(z.string()).default([]),
+    canonical: z.string().url().optional(),
+  }),
+});
+
 const datasets = defineCollection({
   type: 'data',
   schema: z.array(z.string()),
 });
 
-export const collections = { research, datasets };
+export const collections = { research, experiments, datasets };

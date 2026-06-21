@@ -2,13 +2,16 @@ import { getCollection } from 'astro:content';
 import { siteUrl } from '../lib/site';
 
 export async function GET() {
-  const research = await getCollection('research');
-  const items = research
-    .sort((a, b) => b.data.date.getTime() - a.data.date.getTime())
-    .map((entry) => `
+  const [research, experiments] = await Promise.all([getCollection('research'), getCollection('experiments')]);
+  const items = [
+    ...research.map((entry) => ({ entry, base: '/research/' })),
+    ...experiments.map((entry) => ({ entry, base: '/experiments/' })),
+  ]
+    .sort((a, b) => b.entry.data.date.getTime() - a.entry.data.date.getTime())
+    .map(({ entry, base }) => `
         <item>
           <title>${entry.data.title}</title>
-          <link>${siteUrl}/research/${entry.slug}/</link>
+          <link>${siteUrl}${base}${entry.slug}/</link>
           <description>${entry.data.description}</description>
           <pubDate>${entry.data.date.toUTCString()}</pubDate>
         </item>`)
@@ -19,7 +22,7 @@ export async function GET() {
   <channel>
     <title>francanete.dev</title>
     <link>${siteUrl}</link>
-    <description>GEO research and experiments</description>${items}
+    <description>AI software lab research and experiments</description>${items}
   </channel>
 </rss>`;
 

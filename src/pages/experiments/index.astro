@@ -4,23 +4,22 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 import { monthYear, readingTime } from '../../lib/reading';
 import { siteAuthor } from '../../lib/site';
 
-const entries = (await getCollection('research'))
-  .filter((e) => e.data.status !== 'draft')
+const entries = (await getCollection('experiments'))
   .sort((a, b) => b.data.date.getTime() - a.data.date.getTime());
 ---
-<BaseLayout title="Research | francanete.dev" description="Dated, evidence-graded studies of how generative engines discover, cite and reuse the open web.">
+<BaseLayout title="Experiments | francanete.dev" description="Small AI and software experiments, tests, and proofs of concept.">
   <main>
     <section class="ed-wrap" style="padding-top:4rem;text-align:center;">
-      <h1 class="ed-serif" style="font-size:clamp(2.4rem, 5vw, 4rem);margin:0 0 0.9rem;">Research</h1>
+      <h1 class="ed-serif" style="font-size:clamp(2.4rem, 5vw, 4rem);margin:0 0 0.9rem;">Experiments</h1>
       <p style="font-family:var(--ed-serif);font-style:italic;font-size:1.25rem;line-height:1.5;color:var(--ed-ink-2);max-width:46ch;margin:0 auto;">
-        Dated, evidence-graded studies of how generative engines discover, cite and reuse the open web.
+        Small AI and software experiments, tests, and proofs of concept.
       </p>
     </section>
 
     <section class="ed-wrap" style="padding-top:3.5rem;padding-bottom:6rem;">
       {entries.map((entry) => (
-        <a class="ed-art ed-feed-row" href={`/research/${entry.slug}/`}>
-          <p class="ed-dept" style="margin-bottom:0.6rem;">Research</p>
+        <a class="ed-art ed-feed-row" href={`/experiments/${entry.slug}/`}>
+          <p class="ed-dept" style="margin-bottom:0.6rem;">Experiment</p>
           <h3 class="ed-art-h ed-feed-h">{entry.data.title}</h3>
           <p class="ed-feed-dek">{entry.data.description}</p>
           <p class="ed-meta">{siteAuthor} · {monthYear(entry.data.date)} · {readingTime(entry.body)}</p>
