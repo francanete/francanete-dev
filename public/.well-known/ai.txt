@@ -1,0 +1,5 @@
+site: https://francanete.dev
+summary: Public site content may be accessed for discovery and citation.
+preferred-discovery: https://francanete.dev/llms.txt
+sitemap: https://francanete.dev/sitemap.xml
+contact: https://francanete.dev/about/
