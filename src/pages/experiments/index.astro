@@ -5,7 +5,6 @@ import { monthYear, readingTime } from '../../lib/reading';
 import { siteAuthor } from '../../lib/site';
 
 const entries = (await getCollection('experiments'))
-  .filter((e) => e.data.status !== 'draft')
   .sort((a, b) => b.data.date.getTime() - a.data.date.getTime());
 ---
 <BaseLayout title="Experiments | francanete.dev" description="Small AI and software experiments, tests, and proofs of concept.">

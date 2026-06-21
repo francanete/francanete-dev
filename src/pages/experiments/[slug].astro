@@ -7,7 +7,6 @@ import { siteAuthor } from '../../lib/site';
 
 export async function getStaticPaths() {
   const entries = (await getCollection('experiments'))
-    .filter((e) => e.data.status !== 'draft')
     .sort((a, b) => b.data.date.getTime() - a.data.date.getTime());
   return entries.map((entry) => ({ params: { slug: entry.slug }, props: { entry } }));
 }

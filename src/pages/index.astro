@@ -20,7 +20,7 @@ const entries = [
     read: readingTime(entry.body),
     dept: 'Research',
   })),
-  ...experimentEntries.filter((e) => e.data.status !== 'draft').map((entry) => ({
+  ...experimentEntries.map((entry) => ({
     slug: entry.slug,
     href: `/experiments/${entry.slug}/`,
     title: entry.data.title,
