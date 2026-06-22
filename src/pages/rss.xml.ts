@@ -2,9 +2,9 @@ import { getCollection } from 'astro:content';
 import { siteUrl } from '../lib/site';
 
 export async function GET() {
-  const [research, experiments] = await Promise.all([getCollection('research'), getCollection('experiments')]);
+  const [articles, experiments] = await Promise.all([getCollection('articles'), getCollection('experiments')]);
   const items = [
-    ...research.map((entry) => ({ entry, base: '/research/' })),
+    ...articles.map((entry) => ({ entry, base: '/articles/' })),
     ...experiments.map((entry) => ({ entry, base: '/experiments/' })),
   ]
     .sort((a, b) => b.entry.data.date.getTime() - a.entry.data.date.getTime())
@@ -22,7 +22,7 @@ export async function GET() {
   <channel>
     <title>francanete.dev</title>
     <link>${siteUrl}</link>
-    <description>AI software lab research and experiments</description>${items}
+    <description>AI software lab articles and experiments</description>${items}
   </channel>
 </rss>`;
 
